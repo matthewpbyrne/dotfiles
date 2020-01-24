@@ -83,7 +83,8 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'SirVer/ultisnips'
 Plug 'tomtom/tcomment_vim'
-Plug 'Townk/vim-autoclose'
+"Plug 'Townk/vim-autoclose'
+
 
 " Terminal-related
 Plug 'christoomey/vim-tmux-navigator'
@@ -100,6 +101,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
+Plug 'mattn/emmet-vim'
 
 " Tmp scala TODO
 Plug 'derekwyatt/vim-scala'
@@ -141,10 +143,11 @@ call plug#end()
     let g:deoplete#enable_ignore_case = 1
     let g:deoplete#enable_smart_case = 1
   " needed so deoplete can auto select the first suggestion
-    set completeopt+=noinsert
+    "set completeopt+=noinsert " Original version
+    "set completeopt+=
   " comment this line to enable autocompletion preview window
   " (displays documentation related to the selected completion option)
-    set completeopt-=preview
+    "set completeopt-=preview
   " autocompletion of files and commands behaves like shell
   " (complete only the common part, list the options that match)
     set wildmode=list:longest
@@ -262,7 +265,7 @@ call plug#end()
 
 " AutoClose ----------------------------
   " - yop: toggle bracket auto-closing (mnemonic: [p] = parenthesis)
-    noremap <silent> yop :AutoCloseToggle<CR>
+    "noremap <silent> yop :AutoCloseToggle<CR>
 
 " Choosewin ----------------------------
 
