@@ -135,6 +135,20 @@ call plug#end()
     endfunction
     command! AutoFixOnSaveToggle :call s:ToggleAleFixOnSave()
 
+    fun s:ToggleDebugger()
+      let line_no = line('.')
+      let debugger_code='import pdb; pdb.set_trace()'
+
+      if (getline('.')=~ debugger_code )
+        "echom "if"
+        exe line_no . 'd'
+      else
+        "echom "nope!"
+        exe line_no . 's/\(\s*\)\(\S\)/\1' . debugger_code . '\r\1\2'
+      endif
+    endfun
+    command! ToggleDebugger :call s:ToggleDebugger()
+
 " Deoplete -----------------------------
   " TODOs:
   " 1. figure out how to read other buffers from the get-go
@@ -256,6 +270,8 @@ call plug#end()
     noremap <silent> yof :AutoFixOnSaveToggle<CR>
 
     "autocmd FileType js autocmd BufWritePre <buffer> %!python -m json.tool 2>/dev/null || echo <buffer>
+
+    nmap <silent> <leader>b :ToggleDebugger<CR>
 
 " --------------------------------------
 " Plugins ------------------------------
