@@ -310,10 +310,11 @@ call plug#end()
   "
   " <LocalLeader>g... -- Git bindings:
   " - <LocalLeader>gw: State file (mnemonic: [w]rite)
-    nnoremap <silent> <LocalLeader>dd :Gvdiff<CR>
-    nnoremap <silent> <LocalLeader>dp :Gvdiff HEAD<CR>
+    nnoremap <silent> <LocalLeader>dd :Gvdiffsplit<CR>
+    nnoremap <silent> <LocalLeader>dp :Gvdiffsplit HEAD<CR>
     nnoremap <silent> <LocalLeader>dh :diffget //2<CR>
     nnoremap <silent> <LocalLeader>dl :diffget //3<CR>
+    nnoremap <silent> <LocalLeader>gc :Git commit<CR>
     nnoremap <silent> <LocalLeader>gw :Gwrite<CR>
 
 " fzf ----------------------------------
