@@ -135,7 +135,7 @@ call plug#end()
     endfunction
     command! AutoFixOnSaveToggle :call s:ToggleAleFixOnSave()
 
-    fun s:ToggleDebugger()
+    function! s:ToggleDebugger()
       let line_no = line('.')
       let debugger_code='import pdb; pdb.set_trace()'
 
