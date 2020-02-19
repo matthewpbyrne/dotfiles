@@ -268,6 +268,8 @@ call plug#end()
     noremap <silent> <LocalLeader>do :DiffOrig<CR>
   " - yof: toggle auto-fix on saving (mnemonic: [f] = fix)
     noremap <silent> yof :AutoFixOnSaveToggle<CR>
+  " - yoa: toggle autocomplete (deoplete) (mnemonic: [a] = autocomplete)
+    noremap <silent> yoa :call deoplete#toggle()<CR>
 
     "autocmd FileType js autocmd BufWritePre <buffer> %!python -m json.tool 2>/dev/null || echo <buffer>
 
