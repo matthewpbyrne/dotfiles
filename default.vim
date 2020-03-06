@@ -6,9 +6,15 @@
 " General Settings
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" TODO; Add to TODOs:
+" * Check out https://github.com/lambdalisue/gina.vim
+
   " Python
+  " TODO: Clean up
     let g:python3_host_prog = $PYENV_ROOT .  '/versions/py3nvim/bin/python'
     let g:python_host_prog = $PYENV_ROOT .  '/versions/py2nvim/bin/python'
+    " let g:python3_host_prog = '/home/matthew/.local/share/virtualenvs/py3nvim-BOR1eEYn/bin/python'
+    " let g:python_host_prog = '/home/matthew/.local/share/virtualenvs/py2nvim-yrGm60nk/bin/python'
 
   " Misc ---------------------------------
     filetype plugin on    " Enable filetype-specific plugins
@@ -43,6 +49,28 @@
           \ | wincmd p | diffthis
   endif
 
+
+" Make UltiSnips framework-aware (TODO: Explain better)
+    function! s:FASnippets()
+      " TODO: Rails, Phoenix etc.
+      UltiSnipsAddFiletypes django.python
+      echo "UltiSnipsAddFiletypes django.python"
+    endfunction
+    command! FASnippets :call s:FASnippets()
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tmp messing: FIXME: Delete
+    function! s:MyEnv2()
+      echo $LOGNAME
+      "echo '$LOGNAME'
+    endfunction
+    command! MyEnv :call s:MyEnv2()
+
+"noremap <silent> <LocalLeader>m :MyEnv<CR>
+"noremap <silent> <LocalLeader>1 :MyEnv<CR>
+"noremap <silent> <LocalLeader>n :MyEnv2<CR>
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin Sources
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -64,10 +92,11 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 
 " Getting Around
-Plug 'jremmen/vim-ripgrep'
+Plug 'jremmen/vim-ripgrep'  " Is this a subset of fzf-vim
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --all'}
 Plug 'junegunn/fzf.vim'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'skywind3000/gutentags_plus'
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/nerdtree'
 Plug 't9md/vim-choosewin'
@@ -84,7 +113,6 @@ Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'SirVer/ultisnips'
 Plug 'tomtom/tcomment_vim'
 "Plug 'Townk/vim-autoclose'
-
 
 " Terminal-related
 Plug 'christoomey/vim-tmux-navigator'
@@ -121,9 +149,11 @@ call plug#end()
 
 " Dense Analysis -----------------------
     let g:ale_fix_on_save = 1
+    " Get local autopep8 working:
     let g:ale_fixers = {
           \   '*': ['remove_trailing_lines', 'trim_whitespace'],
           \   'javascript': ['eslint'],
+          \   'python': ['isort', 'black'],
           \}
     function! s:ToggleAleFixOnSave()
       let g:ale_fix_on_save = !g:ale_fix_on_save
@@ -134,6 +164,7 @@ call plug#end()
       endif
     endfunction
     command! AutoFixOnSaveToggle :call s:ToggleAleFixOnSave()
+    "let g:ale_python_black_use_global = 1 " Am I needed?
 
     function! s:ToggleDebugger()
       let line_no = line('.')
@@ -148,6 +179,14 @@ call plug#end()
       endif
     endfun
     command! ToggleDebugger :call s:ToggleDebugger()
+
+    function! s:MyEnvPrinter()
+      echo 'PYENV_ROOT: ' $PYENV_ROOT
+      echo 'foos: ' $fooU ' : ' $foox ' : ' $foog
+      echo 'bars: ' $barU ' : ' $barx ' : ' $barg
+    endfunction
+    command! MyEnvPrinter :call s:MyEnvPrinter()
+
 
 " Deoplete -----------------------------
   " TODOs:
@@ -186,6 +225,10 @@ call plug#end()
 " fugitive.vim -------------------------
 
 " fzf ----------------------------------
+  " Figure out how I invoke this?
+  command! -bang -nargs=? -complete=dir Files
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
 
 " fzf-vim ------------------------------
 
@@ -231,6 +274,8 @@ call plug#end()
 
     "let g:UltiSnipsSnippetsDir = '~/.config/nvim/ultisnips-private'
     "let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/ultisnips', '~/.config/nvim/ultisnips-private']
+    " TODO: Get working properly for local
+    "let g:UltiSnipsSnippetDirectories = ['~/.local/share/nvim/plugged/vim-snippets/UltiSnips']
     "let g:UltiSnipsSnippetDirectories = ['~/.config/nvim/ultisnips-private', '~/.config/nvim/ultisnips']
 
 " unimpaired.vim -----------------------
@@ -274,6 +319,8 @@ call plug#end()
     "autocmd FileType js autocmd BufWritePre <buffer> %!python -m json.tool 2>/dev/null || echo <buffer>
 
     nmap <silent> <leader>b :ToggleDebugger<CR>
+    " FIXME - this is temporary:
+    nmap <silent> <LocalLeader>v :MyEnvPrinter<CR>
 
 " --------------------------------------
 " Plugins ------------------------------
@@ -310,6 +357,9 @@ call plug#end()
   "
   " <LocalLeader>g... -- Git bindings:
   " - <LocalLeader>gw: State file (mnemonic: [w]rite)
+    " Check about 3 way splits.
+    " Check if should be `:Git Status`:
+    nnoremap <silent> <LocalLeader>s :Gstatus<CR>
     nnoremap <silent> <LocalLeader>dd :Gvdiffsplit<CR>
     nnoremap <silent> <LocalLeader>dp :Gvdiffsplit HEAD<CR>
     nnoremap <silent> <LocalLeader>dh :diffget //2<CR>
@@ -333,6 +383,8 @@ call plug#end()
     nmap <LocalLeader>F :Lines<CR>
   " commands finder mapping
     nmap <LocalLeader>c :Commands<CR>
+  " maps finder mapping
+    "nmap <LocalLeader>m :Maps<CR>
 
 " NERDCommenter ------------------------
 
@@ -345,8 +397,12 @@ call plug#end()
 " repeat.vim ---------------------------
 
 " RipGrep ------------------------------
-    nmap <LocalLeader>r :Rg
+    " Not sure if needed when hasve fzf.vim
+    " Maybe have case sensitive search too?
+    nmap <LocalLeader>r :Rg -i<Space>
+    nmap <LocalLeader>re :Rg <Space>
     nmap <LocalLeader>wr :Rg <cword><CR>
+    nmap <LocalLeader>wir :Rg <cword><CR>
 
 " Signify ------------------------------
 
@@ -380,10 +436,12 @@ nmap <silent> <leader>g :TestVisit<CR>
 " Vim Tmux Navigator -------------------
 
 
-" TODO
-let g:gutentags_file_list_command = {'markers': {'.pythontags': '~/python_file_lister.py'}}
+" TODO: Get working
+"let g:gutentags_file_list_command = {'markers': {'.pythontags': '~/python_file_lister.py'}}
+"let g:gutentags_ctags_executable_python = '~/python_file_lister.py'
 
 " TODO Use: $ASDF_USER_SHIMS
+" Get working with just `pyls` etc.
 let g:LanguageClient_serverCommands = {
     \ 'javascript': ['/home/matthew/.asdf/shims/javascript-typescript-stdio'],
     \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
