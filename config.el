@@ -208,3 +208,7 @@
 (defun org-babel-execute:typescript (body params)
   (let ((org-babel-js-cmd "npx ts-node < "))
     (org-babel-execute:js body params)))
+
+(setq deft-directory "~/tmp/scratchpad-20230326/"
+      deft-extensions `("org" "txt")
+      deft-recursive t)
