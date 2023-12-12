@@ -51,3 +51,5 @@
 
 (package! org-auto-tangle)
 (package! cider)
+(package! ob-hy)
+(package! ob-typescript)
