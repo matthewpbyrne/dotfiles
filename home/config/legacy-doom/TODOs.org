@@ -1,0 +1,73 @@
+* Objectives
+1. [X] Launching emacs without errors
+   - [X] org-auto-tangle
+   - [X] aob
+2. [X] doom + scratch combo
+   - [X] switching
+   - [X] "Nice" repo management
+
+3. [X] literate programming in orgmode [4/4]
+   - [X] emacs
+   - [X] racket
+   - [X] sbcl
+   - [X] lua
+
+4. [ ] emacs-from-scratch ( https://systemcrafters.net/emacs-from-scratch/)
+   - [ ] hello world
+   - [ ] complete articles
+   - [ ] complete videos
+   - [ ]  https://www.youtube.com/@GavinFreeborn
+
+5. [ ] org keybindings
+   - [ ] good doom cheatsheet readily available
+6. [ ] agenda
+7. [ ] roam
+   - [ ] templates - some ideas:
+     - [ ] Meeting
+     - [ ] Personal Notes
+     - [ ] Lecture / Class notes
+     - [ ] ? Literate programming
+     - [ ] ? Project /TODO list template
+     - [ ] ? Article template and/or KB template
+     - [ ] ? org-drill template (+ friends?)
+   - [ ] device sync
+     - [ ] syncthing
+     - [ ] alternatives
+
+8. [ ] Repo management with general dotfiles
+
+* Cheatsheet
+
+| Binding             | Function              | Description                                          |
+|---------------------+-----------------------+------------------------------------------------------|
+| SPC h r r           | doom-reload           |                                                      |
+| SPC h k             | helpful-key           | describes what key sequence does in current context. |
+| M-x <function name> |                       | show key sequence for a known function               |
+| SPC h b b           | counsel-descbinds     | show all defined keys + defs                         |
+| SPC h b f           |                       | show all keybinds for defined major mode             |
+| C-h v               | describe-variable     | documentation for any variable                       |
+| C-h f               | describe-function     | documentation for any function                       |
+| both of the above   | describe-symbol C-h o |                                                      |
+| SPC ~               |                       | Toggle last popup                                    |
+
+** Deft Mode
+
+| Binding | Description                                                            | Note                |
+|---------+------------------------------------------------------------------------+---------------------|
+| C-o     | open a file in another window without switching                        | Not sure this works |
+| C-u C-o | open the file in another window and switch                             | Not sure this works |
+| C-y.    | yank/paste most recently cut/copied ("killed") text into filter string |                     |
+| C-c C-c | clear filter string                                                    |                     |
+| C-c C-g | refresh file browser using the current filter                          |                     |
+| C-c C-l | filter string (advanced?)                                              |                     |
+| C-c C-t | toggle incremental and regexp search modes                             |                     |
+| C-c C-r | rename file                                                            |                     |
+| C-c C-d | delete                                                                 |                     |
+| C-c C-n | create file (quick)                                                    |                     |
+| C-c C-m | create file (with prompt)                                              |                     |
+| C-c C-q | leave Deft                                                             |                     |
+| C-c C-a | archive file                                                           |                     |
+
+
+** Resources
+https://github.com/doomemacs/doomemacs/blob/master/modules/config/default/+evil-bindings.el
