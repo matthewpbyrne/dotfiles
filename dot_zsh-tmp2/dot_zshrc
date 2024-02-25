@@ -1,0 +1,57 @@
+# --------------------------------------
+# Limirations
+# --------------------------------------
+# - No autocompletion with asdf (Last checked 2022-04-24)
+#   - Possibly due to insufficient understanding of how this works
+
+# --------------------------------------
+# Customizaions
+# --------------------------------------
+
+[ -f "/home/matthew/.ghcup/env" ] && source "/home/matthew/.ghcup/env" # ghcup-env
+
+source $HOME/.zsh_aliases
+. $HOME/.shell/aliases  # `source` is not POSIX-compliant
+. $HOME/.shell/custom_functions  # `source` is not POSIX-compliant
+. $HOME/.shell/env_vars
+
+# End - Customizations
+# --------------------------------------
+
+# --------------------------------------
+# Antigen
+# --------------------------------------
+
+# Move to .local/lib?
+source $HOME/.local/lib/antigen.zsh
+ 
+
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
+
+antigen bundles <<EOBUNDLES
+  
+  redxtech/zsh-asdf-direnv
+  command-not-found
+  docker
+  fasd
+  fzf
+  git
+  gitignore
+  lein
+  pip
+
+  zsh-users/zsh-completions
+  zsh-users/zsh-syntax-highlighting
+EOBUNDLES
+
+# Load the theme.
+# antigen theme robbyrussell
+antigen theme amuse
+# antigen theme jonathan
+#antigen theme arrow
+# antigen theme candy
+#antigen theme fox
+
+# Tell Antigen that you're done.
+antigen apply
