@@ -1,0 +1,2 @@
+unset SSH_AGENT_PID
+eval "$(keychain --eval)"
