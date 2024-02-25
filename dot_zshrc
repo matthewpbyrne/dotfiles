@@ -1,0 +1,43 @@
+# Use powerline
+# USE_POWERLINE="true"
+# Source manjaro-zsh-configuration
+if [[ -e /usr/share/zsh/manjaro-zsh-config ]]; then
+  source /usr/share/zsh/manjaro-zsh-config
+fi
+# Use manjaro zsh prompt
+if [[ -e /usr/share/zsh/manjaro-zsh-prompt ]]; then
+  source /usr/share/zsh/manjaro-zsh-prompt
+fi
+
+############################################################
+# Config common to all shells: zsh, bash, fish
+#
+# Note:
+# - Order is important: env needs to be sourced first
+#
+# Possible improvement(s):
+# - DRYing up '~/.shell'  
+# 
+[[ -f ~/.shell/env ]] && source ~/.shell/env
+[[ -f ~/.shell/aliases ]] && source ~/.shell/aliases
+
+############################################################
+
+# echo "here still FIXME"
+
+. $HOME/.asdf/asdf.sh
+
+# append completions to fpath
+fpath=(${ASDF_DIR}/completions $fpath)
+
+autoload -Uz compinit && compinit
+
+
+#setxkbmap -option caps:swapescape
+source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+
+PATH="/home/matthew/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/matthew/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/matthew/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/matthew/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/matthew/perl5"; export PERL_MM_OPT;
