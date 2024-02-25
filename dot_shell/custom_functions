@@ -1,0 +1,180 @@
+#!/bin/bash
+
+fbehave() {
+    behave "$@" -d -f steps 2> /dev/null | \
+    awk -F " *# " '/\s*(Given|When|Then|\*)/ {print $1"\t"$2}' | \
+    fzf -d "\t" --with-nth=1 \
+        --bind 'enter:execute(echo {} | cut -f2 | pbcopy )' \
+        --bind 'tab:execute(echo {} | cut -f1 | awk "{\$1=\$1};1" | pbcopy )'
+}
+
+# find-in-file - usage: fif <searchTerm>
+fif() {
+  if [ ! "$#" -gt 0 ]; then echo "Need a string to search for!"; return 1; fi
+  rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '$1' || rg --ignore-case --pretty --context 10 '$1' {}"
+}
+alias ff="fzf \
+          --preview 'bat --style=numbers --color=always --line-range :500 {}' \
+          --bind 'alt-g:preview-top,alt-G:preview-bottom' \
+          --bind 'alt-j:preview-up,alt-k:preview-down' \
+          --bind 'alt-u:preview-half-page-up,alt-d:preview-half-page-down' \
+          --bind 'ctrl-b:preview-page-up,ctrl-f:preview-page-down'"
+
+
+fif3() {
+  python -c "import sys; print(sys.version)"
+}
+
+fif4() {
+  python -c "import os; print(os.getenv('SPAM'))"
+}
+
+# 
+# Pattern for toggling some setting
+#
+
+_a_option1="lower_case"
+_a_option2="UPPER_CASE"
+_a="lower_case"
+
+toggle_x() {
+  case $_a in
+    $_a_option1)
+    _a=$_a_option2
+    ;;
+  $_a_option2)
+    _a=$_a_option1
+    ;;
+  esac
+
+  echo "_a: $_a";
+}
+
+
+#a="some general setting"
+
+popts() {
+  echo "stashing \$a: $a";
+  a_=$a;
+  a=$_a
+  echo "  _a: $_a";
+  echo "   a: $a";
+  a=$a_;
+  echo "reinstated \$a: $a"
+}
+
+
+# 
+# Aliases for Python and Ruby install 
+#
+alias gpy="~/tmp/scratchpad-0409/global-venv/.venv/bin/python"
+
+# -------------------------------------------------------------------------------
+# Scratchpad --------------------------------------------------------------------
+# -------------------------------------------------------------------------------
+
+# -----------------------------------------------------------
+# Create a new scratchpad for the current date
+# -----------------------------------------------------------
+
+sp() { 
+  mkdir -p "$HOME/tmp/scratchpad-$(date +%Y%m%d)" && cd $_
+}
+
+_browse_cmd="ranger"
+
+# -----------------------------------------------------------
+# Navigating to the most-recently *created* scratchpad
+# -----------------------------------------------------------
+
+# spn - "*S*cratch *P*ad - *N*ewest"
+alias spn=spbn
+
+# spn - "*S*cratch *P*ad - *B*rowse *N*ewest"
+spbn () {
+  _spn $_browse_cmd
+}
+
+# spn - "*S*cratch *P*ad - *C*hange to *N*ewest"
+spcn () {
+  _spn "cd"
+}
+
+_spn () {
+  local open_cmd="$1"
+  newest=$(find ~/tmp/scratchpad-* -maxdepth 0 -type d -printf '%p\n' | sort -r | head -n1)
+  $open_cmd $newest
+}
+
+# -----------------------------------------------------------
+# Navigating to the most-recently *modified* scratchpad
+# -----------------------------------------------------------
+
+# 1. The sub-directory
+# --------------------
+
+# spl - "*S*cratch *P*ad - *L*ast modified"
+alias spl=spbl
+
+# spbl - "*S*cratch *P*ad - *B*rowse *L*ast modified"
+spbl() {
+  _spl $_browse_cmd
+}
+
+# spbl - "*S*cratch *P*ad - *C*hange to *L*ast modified"
+spcl() {
+  _spl "cd"
+}
+
+_spl () {
+  local open_cmd="$1"
+  local subdir
+  subdir=$(_get_last_modified_scratchpad_subdir 3)
+  $open_cmd $subdir
+}
+
+# 2. The base-directory
+# ---------------------
+
+# spl - "*S*cratch *P*ad - last modified *B*ase"
+alias splb=spblb
+
+# spbl - "*S*cratch *P*ad - *B*rowse *L*ast modified"
+spblb() {
+  _splb $_browse_cmd
+}
+
+# spbl - "*S*cratch *P*ad - *C*hange to *L*ast modified"
+spclb() {
+  _splb "cd"
+}
+
+_splb() {
+  local open_cmd="$1"
+  local subdir
+  local basedir
+  subdir=$(_get_last_modified_scratchpad_subdir 3)
+  basedir=$(_get_scratchpad_basedir $subdir)
+  $open_cmd $basedir
+}
+
+# 3. Supporting Utils
+# ---------------------
+
+function _get_last_modified_scratchpad_subdir() {
+  local maxdepth="${1:-3}"
+  subdir_path=$(find ~/tmp/scratchpad-* -maxdepth $maxdepth -type d -print0 | \
+                xargs -0 stat -c "%Y %n" | \
+                sort -nr | \
+                head -n 1 | \
+                awk '{ print $NF }')
+  echo "$subdir_path"
+}
+
+
+function _get_scratchpad_basedir() {
+  local subdir="$1"
+  echo "$subdir" | cut -d'/' -f-5
+}
+
+# ------------------------------------------------------------------------------

@@ -1,0 +1,11 @@
+EDITOR=/snap/bin/nvim
+
+VISUAL=$EDITOR
+
+GOBIN=$(go env GOPATH)/bin
+GOROOT=$(go env GOROOT)
+RUSTBIN=$(rustup show home)/bin
+
+PATH=$RUSTBIN:$GOBIN:$PATH
+
+$(luarocks path)

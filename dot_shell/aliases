@@ -1,0 +1,53 @@
+# Use podman 
+alias docker=podman
+
+# General shortcuts
+alias ls="exa --long --header --icons --git"
+alias ls_="/usr/bin/ls"
+alias opi="omz plugin info"
+alias opl="omz plugin list"  # TODO 
+alias plantuml="java -jar ~/.local/lib/plantuml.jar"
+alias rr="ranger"
+alias dcupd="podman-compose up -d"
+alias xo="xdg-open"
+alias rtags8='$HOME/tmp/scratchpad-0410/a-ripper-tags-08-install/mybin/ripper-tags'
+alias rtags9='$HOME/tmp/scratchpad-0410/a-ripper-tags-09-install/ripper-tags'
+
+alias ripper-tags='ASDF_RUBY_VERSION=3.0.2 ripper-tags' 
+alias starscope='ASDF_RUBY_VERSION=3.1.1 starscope' 
+
+alias notes="nvim ~/.wipnotes"
+
+# config files
+# common shell config -----------------
+# TODO: maybe write funcs?
+alias cfns='$EDITOR ~/.shell/custom_functions'
+alias conf_aliases='$EDITOR ~/.shell/aliases'
+alias conf_tmux='$EDITOR ~/.tmux.conf'
+alias rc='$EDITOR ~/.shell/* -O'  # Replace me with fn
+
+# emacs -------------------------------
+alias ec="emacsclient"
+
+# vim ---------------------------------
+alias vimrc1='$EDITOR $HOME/.vimrc'
+alias vimrc='$EDITOR $HOME/.config/nvim/init.lua'
+
+alias svim="vim -u $HOME/.SpaceVim/init.vim"
+alias vim_a="vim -u $HOME/.vim-configs/ale/init.vim"
+alias vim_c="vim -u $HOME/.vim-configs/coc/init.vim"
+alias vim_g="vim -u $HOME/.vim-configs/gutentags/init.vim"
+alias vim_l="vim -u $HOME/.vim-configs/lsp/init.vim"
+alias vim_y="vim -u $HOME/.vim-configs/ycm/init.vim"
+alias lvim="nvim -u $HOME/.config/nvim/init.lua"
+alias vvim="nvim -u $HOME/.config/nvim-vs/init.vim"
+
+
+# zsh ---------------------------------
+alias zsh_fasd='$EDITOR .zsh/fasd.zsh'
+alias zshrc='$EDITOR .zshrc'
+alias zshrc2='$EDITOR $HOME/.zsh-tmp2/.zshrc'
+
+# TODOs
+# * Suffix aliases (https://www.thorsten-hans.com/5-types-of-zsh-aliases) ; alias -s 
+# * Reload aliases
