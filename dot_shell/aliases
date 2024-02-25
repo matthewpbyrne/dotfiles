@@ -1,0 +1,13 @@
+# RC / Config files -------------------
+alias bashrc="$EDITOR ~/.bashrc"
+alias conf_aliases="$EDITOR ~/.shell/aliases"
+alias conf_tmux="$EDITOR ~/.tmux.conf"
+alias vimrc="$EDITOR ~/.config/nvim/init.vim"
+alias zshrc="$EDITOR ~/.zshrc"
+
+# General shortcuts
+alias notes='$EDITOR move-me-to-org.org'
+alias opi='omz plugin info'
+alias rr='ranger'
+
+# trying TO SEE  if this works. is IT ANY BET	ter?  No I THINK not.  how ABOUT now?  or even now.  so there you go 
