@@ -117,3 +117,13 @@ if ! shopt -oq posix; then
 fi
 if [ $TILIX_ID ] || [ $VTE_VERSION ] ; then source /etc/profile.d/vte.sh; fi # Ubuntu Budgie END
 
+
+###############################################################################
+# Customizations
+###############################################################################
+
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
+
+# Hook direnv into your shell.
+eval "$(asdf exec direnv hook bash)"
