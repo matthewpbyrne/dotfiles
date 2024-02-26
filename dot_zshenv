@@ -1,2 +1,2 @@
-ZDOTDIR=$HOME/.zsh-tmp2
+ZDOTDIR=$HOME/.zsh-configs/antigen-omz
 # . $ZDOTDIR/.zshenv
