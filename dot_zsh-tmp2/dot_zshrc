@@ -55,3 +55,50 @@ antigen theme amuse
 
 # Tell Antigen that you're done.
 antigen apply
+
+
+# --------------------------------------
+# Tips and Tricks FIXME TODO
+# --------------------------------------
+
+# # From .zshrc
+# -------------
+# # If not using antigen
+# eval "$(asdf exec direnv hook zsh)"
+#
+# # TERM=screen (default) => problematic for ranger
+# export TERM=xterm-256color
+# source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+#
+# [ -f "/home/matthew/.ghcup/env" ] && source "/home/matthew/.ghcup/env" # ghcup-env
+# autoload -Uz compinit
+# zstyle ':completion:*' menu select
+# fpath+=~/.zfunc
+
+# # From .zshrc.bak2
+# ------------------
+#
+# # Usage note(s):
+# # - use `exec zsh` not `source ~/.zshrc`.   See  https://github.com/romkatv/powerlevel10k/blob/master/README.md#weird-things-happen-after-typing-source-zshrc
+# #
+#
+# # export FZF_BASE=$(asdf where fzf)
+# export FZF_BASE=/home/matthew/.asdf/installs/fzf/0.29.0
+# export FZF_TMUX=1
+#
+# # Antigen
+# [[ -f ~/.zsh/antigen.zsh ]] && source ~/.zsh/antigen.zsh
+#
+# # Quotes
+# # [[ -f ~/.zsh/quotes.zsh ]] && source ~/.zsh/quotes.zsh
+#
+# EDITOR="nvim"
+#
+# source ~/.shell/aliases
+#
+# # eval "$(fasd --init auto)"
+# # eval "$(fasd --init posix-alias zsh-hook)"
+# eval "$(fasd --init zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
+#
+# eval "$(direnv hook zsh)"
+# # direnv() { asdf exec direnv "$@"; }
