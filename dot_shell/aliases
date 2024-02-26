@@ -23,8 +23,12 @@ alias notes="nvim ~/.wipnotes"
 # TODO: maybe write funcs?
 alias cfns='$EDITOR ~/.shell/custom_functions'
 alias conf_aliases='$EDITOR ~/.shell/aliases'
+# alias aliasesrc="vim ~/.aliases" # TODO  shrc
 alias conf_tmux='$EDITOR ~/.tmux.conf'
+# alias tmuxrc="vim ~/.tmux.conf" # TODO
 alias rc='$EDITOR ~/.shell/* -O'  # Replace me with fn
+# alias rangerrc="vim ~/.config/ranger/rc.conf" # TODO
+
 
 # emacs -------------------------------
 alias ec="emacsclient"
