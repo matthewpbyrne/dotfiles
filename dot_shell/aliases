@@ -54,3 +54,9 @@ alias zshrc='$EDITOR $HOME/.zsh-configs/antigen-omz/.zshrc'
 # TODOs
 # * Suffix aliases (https://www.thorsten-hans.com/5-types-of-zsh-aliases) ; alias -s 
 # * Reload aliases
+# * Replace aliases with functions, where the alias isn't a true alias (i.e. just a short name for another command)
+# * Example of function with default arguments:
+# my_function() {
+#   local arg1="${1:-default_value}"
+#   echo "Argument value is: $arg1"
+# }
