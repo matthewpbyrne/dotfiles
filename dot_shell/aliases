@@ -2,7 +2,7 @@
 alias bashrc="$EDITOR ~/.bashrc"
 alias conf_aliases="$EDITOR ~/.shell/aliases"
 alias conf_tmux="$EDITOR ~/.tmux.conf"
-alias vimrc="$EDITOR ~/.config/nvim/init.vim"
+alias vimrc="$EDITOR ~/.config/nvim/init.lua ~/.config/nvim/lua/** -O"
 alias zshrc="$EDITOR ~/.zshrc"
 
 # General shortcuts
