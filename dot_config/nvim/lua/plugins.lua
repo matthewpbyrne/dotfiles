@@ -64,7 +64,8 @@ local plugins = {
 	{
 		"nvim-neotest/neotest",
 		dependencies = {
-			"antoinemadec/FixCursorHold.nvim",
+			"antoinemadec/FixCursorHold.nvim", -- Needed for Neotest to work correctly
+			"haydenmeade/neotest-jest",
 			"nvim-lua/plenary.nvim",
 			"nvim-neotest/neotest-plenary",
 			"nvim-neotest/neotest-python",

@@ -10,3 +10,10 @@ end
 function _G.print_hello()
 	print("Hello, Matthew's Neovim!")
 end
+
+function _G.matt_test()
+	print("Hello, matt_test")
+	local my_thing = vim.fn.expand("%")
+	print(my_thing)
+	return require("neotest").run.run()
+end
