@@ -59,6 +59,19 @@ local plugins = {
 		"nvim-telescope/telescope.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
+
+	-- Testing
+	{
+		"nvim-neotest/neotest",
+		dependencies = {
+			"antoinemadec/FixCursorHold.nvim",
+			"nvim-lua/plenary.nvim",
+			"nvim-neotest/neotest-plenary",
+			"nvim-neotest/neotest-python",
+			"nvim-neotest/neotest-vim-test",
+			"nvim-treesitter/nvim-treesitter",
+		},
+	},
 }
 
 -- Require lazy and setup the plugins
