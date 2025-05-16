@@ -40,8 +40,129 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
+;; (setq org-directory "~/org/")
 
+(setq org-directory "~/tmp/scratchpad-20241119/gtd-explorations/single-file/")
+
+
+(setq org-agenda-files (directory-files-recursively
+                         ;; "~/tmp/scratchpad-20241119/gtd-explorations/multi-file/
+                         "~/tmp/scratchpad-20241119/gtd-explorations/single-file/"
+                         "\\.org$"))
+
+(setq org-agenda-custom-commands
+      '(("y" "Completed Yesterday"
+         agenda ""
+         ((org-agenda-span 4)
+          (org-agenda-start-day "-1d")
+          (org-agenda-entry-types '(:closed))))))
+
+;; (after! org-agenda
+;;   (map! :map org-agenda-mode-map
+;;         :n "v d" #'org-agenda-day-view
+;;         :n "v w" #'org-agenda-week-view
+;;         :n "v m" #'org-agenda-month-view))
+
+(setq initial-frame-alist
+      '((top . 10)    ;; Y position
+        (left . 5)   ;; X position
+        (width . 120) ;; Width in characters
+        (height . 80))) ;; Height in lines
+
+;; Org Agenda Evil State Management
+(defvar org-agenda-evil-state 'emacs
+  "The current evil state for org-agenda buffers globally.")
+
+;; (defun org-agenda-toggle-evil-state ()
+;;   "Toggle between `evil-normal-state` and `evil-emacs-state` in the current Org Agenda buffer."
+;;   (interactive)
+;;   (if (evil-normal-state-p)
+;;       (progn
+;;         (setq org-agenda-evil-state 'emacs)
+;;         (evil-emacs-state))
+;;     (progn
+;;       (setq org-agenda-evil-state 'normal)
+;;       (evil-normal-state)))
+;;   (message "Evil state toggled to: %s" org-agenda-evil-state))
+
+(defun org-agenda-set-initial-evil-state ()
+  "Set the initial evil state for the Org Agenda buffer based on the global state."
+  ;; (evil-set-initial-state 'org-agenda-mode org-agenda-evil-state)
+  (evil-change-state org-agenda-evil-state)
+  (message "Org-agenda loaded with state: %s" org-agenda-evil-state))
+
+;; (after! org-agenda
+;;   (map! :map org-agenda-mode-map
+;;         "C-c t" #'org-agenda-toggle-evil-state))
+
+(add-hook 'org-agenda-mode-hook #'org-agenda-set-initial-evil-state)
+
+
+;; ;; Org Agenda Evil State Management
+;; (defvar org-agenda-evil-keymap evil-motion-state-map
+;;   "The current Evil keymap for org-agenda buffers.")
+
+;; (defun org-agenda-toggle-evil-state ()
+;;   "Toggle between `evil-normal-state-map` and `evil-emacs-state-map` for Org Agenda buffers."
+;;   (interactive)
+;;   (if (eq org-agenda-evil-keymap evil-normal-state-map)
+;;       (progn
+;;         (setq org-agenda-evil-keymap evil-emacs-state-map)
+;;         (evil-emacs-state))
+;;     (progn
+;;       (setq org-agenda-evil-keymap evil-normal-state-map)
+;;       (evil-normal-state)))
+;;   (message "Evil keymap toggled to: %s" org-agenda-evil-keymap))
+
+;; (defun org-agenda-set-initial-evil-keymap ()
+;;   "Set the initial Evil keymap for Org Agenda buffers."
+;;   (evil-set-initial-state 'org-agenda-mode
+;;                           (if (eq org-agenda-evil-keymap evil-normal-state-map)
+;;                               'normal
+;;                             'emacs))
+;;   (message "Org-agenda loaded with keymap: %s" org-agenda-evil-keymap))
+
+;; (after! org-agenda
+;;   (map! :map org-agenda-mode-map
+;;         "C-c t" #'org-agenda-toggle-evil-state))
+
+;; (add-hook 'org-agenda-mode-hook #'org-agenda-set-initial-evil-keymap)
+
+;; ;; Org Agenda Evil State Management
+;; (defvar org-agenda-evil-state 'emacs
+;;   "The current evil state for org-agenda buffers globally.")
+
+;; (defun org-agenda-refresh-keybindings ()
+;;   "Refresh keybindings for org-agenda-mode by syncing with Evil's current state."
+;;   (set-keymap-parent org-agenda-mode-map
+;;                      (cond ((eq org-agenda-evil-state 'normal) evil-normal-state-map)
+;;                            ((eq org-agenda-evil-state 'emacs) evil-emacs-state-map)
+;;                            (t evil-motion-state-map))))
+
+;; (defun org-agenda-toggle-evil-state ()
+;;   "Toggle between `evil-normal-state` and `evil-emacs-state` in the current Org Agenda buffer."
+;;   (interactive)
+;;   (if (evil-normal-state-p)
+;;       (progn
+;;         (setq org-agenda-evil-state 'emacs)
+;;         (evil-emacs-state))
+;;     (progn
+;;       (setq org-agenda-evil-state 'normal)
+;;       (evil-normal-state)))
+;;   (org-agenda-refresh-keybindings) ;; Sync keybindings with the new state
+;;   (message "Evil state toggled to: %s" org-agenda-evil-state))
+
+;; (defun org-agenda-set-initial-evil-state ()
+;;   "Set the initial evil state for the Org Agenda buffer based on the global state."
+;;   (evil-set-initial-state 'org-agenda-mode org-agenda-evil-state)
+;;   (org-agenda-refresh-keybindings) ;; Sync keybindings during mode initialization
+;;   (message "Org-agenda loaded with state: %s" org-agenda-evil-state))
+
+;; (after! org-agenda
+;;   (map! :map org-agenda-mode-map
+;;         "C-c t" #'org-agenda-toggle-evil-state))
+
+;; (add-hook 'org-agenda-mode-hook #'org-agenda-set-initial-evil-state)
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
