@@ -9,4 +9,7 @@
 (after! org
   (require 'org-depend))
 
+(use-package! org-ql
+  :after org)
+
 (load! "agenda.el")
