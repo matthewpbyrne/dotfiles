@@ -12,4 +12,9 @@
 (use-package! org-ql
   :after org)
 
+(use-package! org-transclusion
+  :after org
+  :config
+  (org-transclusion-mode))
+
 (load! "agenda.el")
