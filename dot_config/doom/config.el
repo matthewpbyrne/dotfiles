@@ -38,31 +38,7 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/"
-      org-enforce-todo-checkbox-dependencies t
-      org-agenda-log-mode-items '(state clock closed)
-      org-agenda-start-with-log-mode t
-      org-log-done 'time)
-
-(setq org-agenda-custom-commands
-      '(("d" "Dashboard"
-         ((agenda ""
-                  ((org-agenda-todo-keyword-format "")
-                   (org-agenda-skip-function
-                    '(org-agenda-skip-entry-if 'todo '("CANCELLED")))
-                   (org-deadline-warning-days 14)))
-          (todo "WAIT"
-                ((org-agenda-todo-keyword-format "")
-                 (org-agenda-overriding-header "BLOCKED:")))
-          (todo "NEXT"
-                ((org-agenda-todo-keyword-format "")
-                 (org-agenda-overriding-header "NEXT:")))
-          (todo "CANCELLED"
-                ((org-agenda-todo-keyword-format "")
-                 (org-agenda-overriding-header "CANCELLED:")))))))
-
+(load! "org/org.el")
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -95,9 +71,6 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-
-(after! org
-  (require 'org-depend))
 
 (use-package! apheleia
   :config
