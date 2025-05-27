@@ -72,19 +72,6 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(use-package! org-roam
-  :init
-  (setq org-roam-v2-act t) ;; suppress upgrade warning
-  :custom
-  (org-roam-directory "~/org/roam")
-  :config
-  (org-roam-db-autosync-mode))
-
-(use-package! org-super-agenda
-  :after org-agenda
-  :config
-  (org-super-agenda-mode))
-
 (use-package! apheleia
   :config
   (apheleia-global-mode +1))
