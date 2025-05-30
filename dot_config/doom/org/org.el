@@ -1,20 +1,23 @@
 ;;; org/org.el -*- lexical-binding: t; -*-
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
+;; Early org settings (OK to go before `after!`)
 (setq org-directory "~/org/"
       org-enforce-todo-checkbox-dependencies t
       org-log-done 'time)
 
+;; Org configuration block
 (after! org
-  (require 'org-depend))
+  (require 'org-depend)
 
-(use-package! org-ql
-  :after org)
+  (use-package! org-ql :after org)
+  (use-package! org-super-agenda
+    :after org-agenda
+    :config
+    (org-super-agenda-mode))
+  (use-package! org-transclusion
+    :after org
+    :hook (org-mode . org-transclusion-mode))
 
-(use-package! org-transclusion
-  :after org
-  :config
-  (org-transclusion-mode))
-
-(load! "agenda.el")
+  ;; Load agenda customizations (deferred until Org is ready)
+  ;; (load! "agenda.el" (doom-path "~/.doom.d/org/")))
+  (load! "agenda.el"))
