@@ -75,3 +75,40 @@
                        (:name "Priority H"    :priority>= "B" :todo ("NEXT" "TODO" "IDEA"))
                        (:name "Priority L"    :priority<= "B")
                        (:discard (:tag "someday"))))))))))
+
+;; custom agenda file management functions
+
+(defvar +org-agenda-files-backup nil
+  "Backup of the original `org-agenda-files` before it was overridden.")
+
+(defun +org-agenda-set-to-current-file ()
+  "Set `org-agenda-files` to just the current file, backing up the previous value."
+  (interactive)
+  (when (buffer-file-name)
+    (setq +org-agenda-files-backup org-agenda-files)
+    (setq org-agenda-files (list (buffer-file-name)))
+    (message "org-agenda-files set to current file: %s" (buffer-file-name))))
+
+(defun +org-agenda-restore-backup ()
+  "Restore the previous `org-agenda-files` from backup."
+  (interactive)
+  (if +org-agenda-files-backup
+      (progn
+        (setq org-agenda-files +org-agenda-files-backup)
+        (message "org-agenda-files restored from backup."))
+    (message "No backup found for org-agenda-files.")))
+
+(defun +org-agenda-restore-from-custom ()
+  "Reset `org-agenda-files` to the value stored in `custom-file`."
+  (interactive)
+  (when (and custom-file (file-exists-p custom-file))
+    (load custom-file)
+    (message "org-agenda-files restored: %S" org-agenda-files)
+    ; (message "org-agenda-files restored from custom.el.")
+    ))
+
+(map! :leader
+      (:prefix ("o a" . "Org Agenda")
+       :desc "Set agenda to current file" "c" #'+org-agenda-set-to-current-file
+       :desc "Restore agenda from backup" "b" #'+org-agenda-restore-backup
+       :desc "Restore agenda from custom.el" "r" #'+org-agenda-restore-from-custom))
