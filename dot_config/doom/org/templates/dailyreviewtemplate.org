@@ -1,0 +1,22 @@
+* %<%Y-%m-%d %A>
+:PROPERTIES:
+:CREATED: %U
+:END:
+
+** Gratitude
+kk asdf
+
+** Today's Plan
+- [ ] Major task 1
+- [ ] Major task 2
+** Meetings
+** Notes
+-
+
+** Review
+- What went well?
+-
+- What could be improved?
+-
+
+

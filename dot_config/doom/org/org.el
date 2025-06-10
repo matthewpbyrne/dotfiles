@@ -26,6 +26,7 @@
   ;; (add-to-list 'org-dynamic-block-alist '("test-block" . org-dblock-write:test-block))
   (add-to-list 'org-dynamic-block-alist '("org-ql" . org-dblock-write:org-ql))
 
+  (load! "capture-templates.el")
   ;; Load agenda customizations (deferred until Org is ready)
   ;; (load! "agenda.el" (doom-path "~/.doom.d/org/")))
   (load! "agenda.el"))

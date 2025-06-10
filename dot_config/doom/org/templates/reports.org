@@ -1,0 +1,21 @@
+* Reports
+** Report: %^{Report Title}
+:PROPERTIES:
+:CREATED: %U
+:END:
+
+*** Summary
+%?
+
+*** Details
+- asdf
+- Key points:
+  -
+- Supporting data:
+- [ ] whatever
+- [ ]
+
+*** Next Steps
+- [ ] Action item 1
+- [ ] Action item 2
+
