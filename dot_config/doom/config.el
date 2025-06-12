@@ -75,3 +75,13 @@
 (use-package! apheleia
   :config
   (apheleia-global-mode +1))
+
+;; TODO clean up:
+(use-package! denote
+  :init
+  (setq denote-directory "~/org/denote-hacking/")
+  ;; :custom
+  ;; ;; (denote-directory "~/notes/denote/")  ;; set your notes directory
+  ;; ;; :hook
+  ;; ;; (dired-mode . denote-dired-mode))     ;; enable denote in dired for renaming
+  )

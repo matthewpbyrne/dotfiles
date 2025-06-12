@@ -9,6 +9,7 @@
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;; (package! some-package)
 (package! apheleia)
+(package! denote)
 (package! org-ql)
 (package! org-transclusion)
 
