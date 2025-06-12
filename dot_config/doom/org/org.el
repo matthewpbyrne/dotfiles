@@ -23,6 +23,19 @@
     :after org
     :hook (org-mode . org-transclusion-mode))
 
+  (use-package! org-journal
+    :config
+    (setq org-journal-date-format "%A, %d %B %Y"
+          org-journal-dir "~/org/myjournal2/"
+          org-journal-file-type 'weekly)
+    ;; :custom
+    ;; (org-journal-dir "~/org/myjournal/")  ;; set your journal directory TODO
+    ;; (org-journal-file-type 'daily)        ;; daily journal files
+    ;; (org-journal-date-prefix "#+TITLE: ") ;; optional, for org titles
+    ;; :bind
+    ;; ("C-c j" . org-journal-new-entry))    ;; keybinding to create new journal entry
+    )
+
   ;; (add-to-list 'org-dynamic-block-alist '("test-block" . org-dblock-write:test-block))
   (add-to-list 'org-dynamic-block-alist '("org-ql" . org-dblock-write:org-ql))
 
