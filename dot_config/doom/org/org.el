@@ -13,8 +13,13 @@
 ;; Org configuration block
 (after! org
   (require 'org-depend)
+  ;; (require 'org-roam-ql-dblock)
 
   (use-package! org-ql :after org)
+  (use-package! org-roam-ql
+    :after org-roam
+    :config
+    (org-roam-ql-mode))
   (use-package! org-super-agenda
     :after org-agenda
     :config

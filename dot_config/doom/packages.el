@@ -11,6 +11,8 @@
 (package! apheleia)
 (package! denote)
 (package! org-ql)
+(package! org-roam-ql)
+;; :recipe (:host github :repo "nobiot/org-roam-ql"))
 (package! org-transclusion)
 
 ;; To install a package directly from a remote git repo, you must specify a
