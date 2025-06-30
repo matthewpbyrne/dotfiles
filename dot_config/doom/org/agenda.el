@@ -71,6 +71,7 @@
            ((org-ql-block-header "Cancelled Projects")
             (org-super-agenda-groups
              '((:auto-property "PROJ_NAME")))))))
+
         ("C" "Compound GTD View !!!"
          ((agenda ""
                   ((org-agenda-span 1)
@@ -91,11 +92,11 @@
                        (:name "Projects"    :category "projects")
                        (:discard (:category "States"))))))
 
-          (alltodo ""
-                   ((org-agenda-overriding-header "📌 Client grouping")
-                    (org-super-agenda-groups
-                     '((:auto-property "Client")
-                       (:discard (:anything))))))
+          (todo "NEXT"
+                ((org-agenda-overriding-header "📌 AOF grouping")
+                 (org-super-agenda-groups
+                  '((:auto-property "AOF" :todo "NEXT")
+                    (:discard (:anything))))))
 
           (alltodo ""
                    ((org-agenda-overriding-header "📌 Task Summary !!!")
