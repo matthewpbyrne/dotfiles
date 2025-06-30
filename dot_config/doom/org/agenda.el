@@ -38,6 +38,39 @@
                 :todo "WAIT")
                (:discard (:tag "someday"))))))))
 
+        ("p" "Projects"
+         (
+          ;; ;; without org-ql, lists top-level projects
+          ;; (todo "" ((org-agenda-overriding-header "Active Projects")
+          ;;           (org-super-agenda-groups
+          ;;            '((:name none  ; Disable super group header
+          ;;               :children todo)
+          ;;              (:discard (:anything t))))))
+          (org-ql-block
+           '(and
+             (or (todo) (done))
+             (not  (ancestors (done)))
+             (parent (todo)))
+           ((org-ql-block-header "Acitve Projects")
+            (org-super-agenda-groups
+             '((:auto-property "PROJ_NAME")
+               (:discard (:anything t))))))
+          (org-ql-block
+           '(and
+             (or (todo) (done))
+             (ancestors (todo "DONE"))
+             (not (ancestors (todo "CANCELED"))))
+           ((org-ql-block-header "Completed Projects")
+            (org-super-agenda-groups
+             '((:auto-property "PROJ_NAME")
+               (:discard (:anything t))))))
+          (org-ql-block
+           '(and
+             (or (todo) (done))
+             (ancestors (and (todo "CANCELED") (not (parent (or (todo) (todo "DONE")))))))
+           ((org-ql-block-header "Cancelled Projects")
+            (org-super-agenda-groups
+             '((:auto-property "PROJ_NAME")))))))
         ("C" "Compound GTD View !!!"
          ((agenda ""
                   ((org-agenda-span 1)
@@ -104,7 +137,7 @@
   (when (and custom-file (file-exists-p custom-file))
     (load custom-file)
     (message "org-agenda-files restored: %S" org-agenda-files)
-    ; (message "org-agenda-files restored from custom.el.")
+    ;; (message "org-agenda-files restored from custom.el.")
     ))
 
 (map! :leader
