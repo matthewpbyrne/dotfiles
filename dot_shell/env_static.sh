@@ -1,7 +1,20 @@
 # shellcheck shell=sh
 
-export EDITOR=/snap/bin/nvim
-export VISUAL="$EDITOR"
+if [ -z "${EDITOR}" ]; then
+    if command -v nvim >/dev/null 2>&1; then
+        EDITOR=nvim
+    elif command -v vim >/dev/null 2>&1; then
+        EDITOR=vim
+    else
+        EDITOR=vi
+    fi
+fi
+export EDITOR
+
+if [ -z "${VISUAL+x}" ]; then
+    VISUAL=$EDITOR
+fi
+export VISUAL
 export PAGER=less
 
 export PNPM_HOME="$HOME/.local/share/pnpm"
