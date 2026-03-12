@@ -75,6 +75,15 @@ dcupd() {
 _tmux_profile_name() {
   local profile
   profile=${1:-default}
+
+  case "$profile" in
+    (*[!A-Za-z0-9_-]*|'')
+      printf '%s\n' "invalid tmux profile '$profile' (allowed: A-Za-z0-9_-); using default" >&2
+      printf '%s' default
+      return
+      ;;
+  esac
+
   printf '%s' "$profile"
 }
 
