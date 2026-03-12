@@ -72,19 +72,19 @@ dcupd() {
 # These helpers launch tmux servers with separate sockets per profile so profile
 # config stays server-scoped and does not clash.
 
-_tmux_profile_name() {
-	profile=${1:-default}
+_tmux_profile_name() (
+	tmuxp_profile=${1:-default}
 
-	case "$profile" in
+	case "$tmuxp_profile" in
 	*[!A-Za-z0-9_-]* | '')
-		printf '%s\n' "invalid tmux profile '$profile' (allowed: A-Za-z0-9_-); using default" >&2
+		printf '%s\n' "invalid tmux profile '$tmuxp_profile' (allowed: A-Za-z0-9_-); using default" >&2
 		printf '%s' default
 		return
 		;;
 	esac
 
-	printf '%s' "$profile"
-}
+	printf '%s' "$tmuxp_profile"
+)
 
 tmux_profiles() {
 	if [ -d "$HOME/.config/tmux/profiles" ]; then
@@ -97,29 +97,25 @@ tmux_profiles() {
 	fi
 }
 
-tmuxp() {
+tmuxp() (
 	if ! command -v tmux >/dev/null 2>&1; then
 		printf '%s\n' 'tmux is not installed or not on PATH' >&2
 		return 127
 	fi
 
-	profile=$(_tmux_profile_name "$1")
-	socket="profile-${profile}"
+	tmuxp_profile=$(_tmux_profile_name "$1")
+	tmuxp_socket="profile-${tmuxp_profile}"
 
 	if [ "$#" -gt 0 ]; then
 		shift
 	fi
 
 	if [ "$#" -gt 0 ]; then
-		TMUX_PROFILE="$profile" tmux -L "$socket" "$@"
-		tmux_status=$?
-		unset profile socket tmux_status
-		return "$tmux_status"
+		TMUX_PROFILE="$tmuxp_profile" tmux -L "$tmuxp_socket" "$@"
+		return $?
 	fi
 
 	# Default UX: attach to existing server or create a new session on this profile socket.
-	TMUX_PROFILE="$profile" tmux -L "$socket" new-session -A -s main
-	tmux_status=$?
-	unset profile socket tmux_status
-	return "$tmux_status"
-}
+	TMUX_PROFILE="$tmuxp_profile" tmux -L "$tmuxp_socket" new-session -A -s main
+	return $?
+)
