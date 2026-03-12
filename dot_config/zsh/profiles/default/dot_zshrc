@@ -37,11 +37,12 @@ zstyle ':completion:*' menu select
 compinit
 
 # Antigen / Oh My Zsh
-[ -f "$HOME/.local/lib/antigen.zsh" ] && source "$HOME/.local/lib/antigen.zsh"
+if [ -f "$HOME/.local/lib/antigen.zsh" ]; then
+  source "$HOME/.local/lib/antigen.zsh"
 
-antigen use oh-my-zsh
+  antigen use oh-my-zsh
 
-antigen bundles <<'EOBUNDLES'
+  antigen bundles <<'EOBUNDLES'
 command-not-found
 docker
 fasd
@@ -54,8 +55,9 @@ zsh-users/zsh-completions
 zsh-users/zsh-syntax-highlighting
 EOBUNDLES
 
-antigen theme amuse
-antigen apply
+  antigen theme amuse
+  antigen apply
+fi
 
 # PATH hygiene
 path=(${path:#$HOME/.antigen/bundles/*})

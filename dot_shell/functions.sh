@@ -5,7 +5,7 @@ up() {
 }
 
 rc() {
-	"$EDITOR" "$HOME"/.shell/* -O
+	"$EDITOR" -O "$HOME"/.shell/*
 }
 
 zprofile_edit() {
@@ -17,10 +17,10 @@ bashrc_edit() {
 }
 
 dotfiles() {
-	"$EDITOR" \
+	"$EDITOR" -O \
 		"$HOME/.profile" \
 		"$HOME/.bashrc" \
 		"$HOME/.tmux.conf" \
 		"$HOME/.shell/"* \
-		"${ZDOTDIR:-$HOME}/.zshrc" -O
+		"${ZDOTDIR:-$HOME}/.zshrc"
 }
