@@ -72,7 +72,7 @@ dcupd() {
 # These helpers launch tmux servers with separate sockets per profile so profile
 # config stays server-scoped and does not clash.
 
-_tmux_profile_name() {
+_tmux_profile_name() (
 	tmuxp_profile=${1:-default}
 
 	case "$tmuxp_profile" in
@@ -84,7 +84,7 @@ _tmux_profile_name() {
 	esac
 
 	printf '%s' "$tmuxp_profile"
-}
+)
 
 tmux_profiles() {
 	if [ -d "$HOME/.config/tmux/profiles" ]; then
@@ -97,7 +97,7 @@ tmux_profiles() {
 	fi
 }
 
-tmuxp() {
+tmuxp() (
 	if ! command -v tmux >/dev/null 2>&1; then
 		printf '%s\n' 'tmux is not installed or not on PATH' >&2
 		return 127
@@ -118,4 +118,4 @@ tmuxp() {
 	# Default UX: attach to existing server or create a new session on this profile socket.
 	TMUX_PROFILE="$tmuxp_profile" tmux -L "$tmuxp_socket" new-session -A -s main
 	return $?
-}
+)
