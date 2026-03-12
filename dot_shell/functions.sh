@@ -22,5 +22,5 @@ dotfiles() {
 		"$HOME/.bashrc" \
 		"$HOME/.tmux.conf" \
 		"$HOME/.shell/"* \
-		"$ZDOTDIR/.zshrc" -O
+		"${ZDOTDIR:-$HOME}/.zshrc" -O
 }
