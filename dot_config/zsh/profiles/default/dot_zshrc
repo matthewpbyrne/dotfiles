@@ -1,0 +1,67 @@
+# Managed by chezmoi
+
+# Shared static environment + secrets
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
+
+# Ensure Homebrew is on PATH if available
+if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+  export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+fi
+
+# asdf via Homebrew
+if command -v brew >/dev/null 2>&1; then
+  ASDF_PREFIX="$(brew --prefix asdf 2>/dev/null)"
+  if [ -n "$ASDF_PREFIX" ] && [ -f "$ASDF_PREFIX/libexec/asdf.sh" ]; then
+    . "$ASDF_PREFIX/libexec/asdf.sh"
+  fi
+fi
+
+# Shared shell files
+[ -f "$HOME/.shell/aliases.sh" ] && . "$HOME/.shell/aliases.sh"
+[ -f "$HOME/.shell/functions.sh" ] && . "$HOME/.shell/functions.sh"
+[ -f "$HOME/.shell/functions_scratch.sh" ] && . "$HOME/.shell/functions_scratch.sh"
+
+# Zsh-specific shell files
+[ -f "$ZDOTDIR/aliases.zsh" ] && . "$ZDOTDIR/aliases.zsh"
+[ -f "$ZDOTDIR/functions.zsh" ] && . "$ZDOTDIR/functions.zsh"
+
+# Optional ghcup
+[ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
+
+# Dynamic/tool-dependent environment
+[ -f "$HOME/.shell/env_dynamic.sh" ] && . "$HOME/.shell/env_dynamic.sh"
+
+# Completion
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+compinit
+
+# Antigen / Oh My Zsh
+source "$HOME/.local/lib/antigen.zsh"
+
+antigen use oh-my-zsh
+
+antigen bundles <<'EOBUNDLES'
+command-not-found
+docker
+fasd
+fzf
+git
+gitignore
+lein
+pip
+zsh-users/zsh-completions
+zsh-users/zsh-syntax-highlighting
+EOBUNDLES
+
+antigen theme amuse
+antigen apply
+
+# PATH hygiene
+path=(${path:#$HOME/.antigen/bundles/*})
+path=(${path:#""})
+typeset -U path
+export PATH
+
+# direnv
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"

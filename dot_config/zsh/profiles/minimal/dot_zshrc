@@ -1,0 +1,5 @@
+# Managed by chezmoi
+
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
+
+PS1='%n@%m:%~$ '
