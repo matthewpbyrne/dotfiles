@@ -21,7 +21,7 @@ scratch_last_created() {
 
 scratch_last_modified() {
 	find "$SCRATCH_HOME" -maxdepth 3 -type d -name 'scratchpad-*' -print0 2>/dev/null |
-		xargs -0 stat -c '%Y %n' 2>/dev/null |
+		xargs -0 -r stat -c '%Y %n' 2>/dev/null |
 		sort -nr |
 		head -n 1 |
 		cut -d' ' -f2-
