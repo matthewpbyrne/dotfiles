@@ -37,7 +37,7 @@ zstyle ':completion:*' menu select
 compinit
 
 # Antigen / Oh My Zsh
-source "$HOME/.local/lib/antigen.zsh"
+[ -f "$HOME/.local/lib/antigen.zsh" ] && source "$HOME/.local/lib/antigen.zsh"
 
 antigen use oh-my-zsh
 
