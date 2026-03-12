@@ -1,0 +1,13 @@
+# ~/.shell secrets
+.shell/secrets.sh
+.shell/*.secret
+.shell/*.private
+
+# common secret filenames
+*.env
+*.env.local
+*.secret
+*.private
+
+# optional: machine-specific overrides
+*.local.sh
