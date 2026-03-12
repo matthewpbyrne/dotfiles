@@ -21,7 +21,12 @@
 # Completion
 autoload -Uz compinit
 zstyle ':completion:*' menu select
-compinit
+
+if [ -f "${ZDOTDIR:-$HOME}/.zcompdump" ]; then
+  compinit -C
+else
+  compinit
+fi
 
 # Antigen / Oh My Zsh
 if [ -f "$HOME/.local/lib/antigen.zsh" ]; then
@@ -47,10 +52,10 @@ EOBUNDLES
 fi
 
 # PATH hygiene
+typeset -U path
 path=(${path:#$HOME/.antigen/bundles/*})
 path=(${path:#""})
-typeset -U path
 export PATH
 
 # direnv
-command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
