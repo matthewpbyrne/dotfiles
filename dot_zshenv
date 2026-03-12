@@ -1,0 +1,2 @@
+export ZSH_PROFILE="${ZSH_PROFILE:-default}"
+export ZDOTDIR="$HOME/.config/zsh/profiles/$ZSH_PROFILE"

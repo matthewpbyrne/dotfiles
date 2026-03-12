@@ -1,0 +1,36 @@
+# shellcheck shell=bash
+# Managed by chezmoi
+
+# Exit if non-interactive shell
+case $- in
+*i*) ;;
+*) return ;;
+esac
+
+# Shared static environment + secrets + envman
+# shellcheck source=/dev/null
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
+
+# Shared shell files
+# shellcheck source=/dev/null
+[ -f "$HOME/.shell/aliases.sh" ] && . "$HOME/.shell/aliases.sh"
+# shellcheck source=/dev/null
+[ -f "$HOME/.shell/functions.sh" ] && . "$HOME/.shell/functions.sh"
+# shellcheck source=/dev/null
+[ -f "$HOME/.shell/functions_workspaces.sh" ] && . "$HOME/.shell/functions_workspaces.sh"
+
+# Dynamic environment (after tools exist)
+# shellcheck source=/dev/null
+[ -f "$HOME/.shell/env_dynamic.sh" ] && . "$HOME/.shell/env_dynamic.sh"
+
+# direnv
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
+
+# History tweaks
+HISTCONTROL=ignoreboth
+HISTSIZE=5000
+HISTFILESIZE=10000
+shopt -s histappend
+
+# Minimal prompt
+PS1='\u@\h:\w\$ '

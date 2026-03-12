@@ -1,0 +1,56 @@
+# Managed by chezmoi
+
+# Shared static environment + secrets
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
+
+# Shared shell files
+[ -f "$HOME/.shell/aliases.sh" ] && . "$HOME/.shell/aliases.sh"
+[ -f "$HOME/.shell/functions.sh" ] && . "$HOME/.shell/functions.sh"
+[ -f "$HOME/.shell/functions_workspaces.sh" ] && . "$HOME/.shell/functions_workspaces.sh"
+
+# Zsh-specific shell files
+[ -f "$ZDOTDIR/aliases.zsh" ] && . "$ZDOTDIR/aliases.zsh"
+[ -f "$ZDOTDIR/functions.zsh" ] && . "$ZDOTDIR/functions.zsh"
+
+# Optional ghcup
+[ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
+
+# Dynamic/tool-dependent environment
+[ -f "$HOME/.shell/env_dynamic.sh" ] && . "$HOME/.shell/env_dynamic.sh"
+
+# Completion
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+compinit
+
+# Antigen / Oh My Zsh
+if [ -f "$HOME/.local/lib/antigen.zsh" ]; then
+  source "$HOME/.local/lib/antigen.zsh"
+
+  antigen use oh-my-zsh
+
+  antigen bundles <<'EOBUNDLES'
+command-not-found
+docker
+fasd
+fzf
+git
+gitignore
+lein
+pip
+zsh-users/zsh-completions
+zsh-users/zsh-syntax-highlighting
+EOBUNDLES
+
+  antigen theme amuse
+  antigen apply
+fi
+
+# PATH hygiene
+path=(${path:#$HOME/.antigen/bundles/*})
+path=(${path:#""})
+typeset -U path
+export PATH
+
+# direnv
+command -v direnv >/dev/null 2>&1 && eval "$(direnv hook zsh)"
