@@ -113,15 +113,13 @@ tmuxp() {
 	if [ "$#" -gt 0 ]; then
 		TMUX_PROFILE="$profile" tmux -L "$socket" "$@"
 		tmux_status=$?
-		set -- "$tmux_status"
 		unset profile socket tmux_status
-		return "$1"
+		return "$tmux_status"
 	fi
 
 	# Default UX: attach to existing server or create a new session on this profile socket.
 	TMUX_PROFILE="$profile" tmux -L "$socket" new-session -A -s main
 	tmux_status=$?
-	set -- "$tmux_status"
 	unset profile socket tmux_status
-	return "$1"
+	return "$tmux_status"
 }
