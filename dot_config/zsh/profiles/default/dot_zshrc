@@ -3,19 +3,6 @@
 # Shared static environment + secrets
 [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
-# Ensure Homebrew is on PATH if available
-if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-  export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-fi
-
-# asdf via Homebrew
-if command -v brew >/dev/null 2>&1; then
-  ASDF_PREFIX="$(brew --prefix asdf 2>/dev/null)"
-  if [ -n "$ASDF_PREFIX" ] && [ -f "$ASDF_PREFIX/libexec/asdf.sh" ]; then
-    . "$ASDF_PREFIX/libexec/asdf.sh"
-  fi
-fi
-
 # Shared shell files
 [ -f "$HOME/.shell/aliases.sh" ] && . "$HOME/.shell/aliases.sh"
 [ -f "$HOME/.shell/functions.sh" ] && . "$HOME/.shell/functions.sh"
