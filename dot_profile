@@ -1,0 +1,14 @@
+# shellcheck shell=sh
+# Shared login-shell environment
+
+# Shared static environment for login shells
+# shellcheck source=/dev/null
+[ -f "$HOME/.shell/env_static.sh" ] && . "$HOME/.shell/env_static.sh"
+
+# Secrets
+# shellcheck source=/dev/null
+[ -f "$HOME/.shell/secrets.sh" ] && . "$HOME/.shell/secrets.sh"
+
+# Optional environment manager
+# shellcheck source=/dev/null
+[ -s "$HOME/.config/envman/load.sh" ] && . "$HOME/.config/envman/load.sh"
