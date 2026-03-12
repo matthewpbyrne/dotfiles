@@ -181,16 +181,38 @@ wsrm() {
 	#   wsrm scratch/foo
 	#   wsrm /full/path/to/workspace
 
-	local target
+	local target workspace_root
+
+	workspace_root="${WORKSPACE_HOME:?WORKSPACE_HOME is not set}"
 	target="$1"
 
-	[ -n "$target" ] || return 1
+	[ -n "$target" ] || {
+		printf 'usage: wsrm <workspace>\n' >&2
+		return 1
+	}
 
 	case "$target" in
 	/*) ;;
-	*) target="$WORKSPACE_HOME/$target" ;;
+	*) target="$workspace_root/$target" ;;
 	esac
 
-	[ -d "$target" ] || return 1
+	[ -d "$target" ] || {
+		printf 'wsrm: not a directory: %s\n' "$target" >&2
+		return 1
+	}
+
+	case "$target" in
+	"$workspace_root" | "$workspace_root"/)
+		printf 'wsrm: refusing to remove WORKSPACE_HOME itself: %s\n' "$target" >&2
+		return 1
+		;;
+	"$workspace_root"/*) ;;
+
+	*)
+		printf 'wsrm: refusing to remove path outside WORKSPACE_HOME: %s\n' "$target" >&2
+		return 1
+		;;
+	esac
+
 	rm -rf -- "$target"
 }
