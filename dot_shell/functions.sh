@@ -73,7 +73,6 @@ dcupd() {
 # config stays server-scoped and does not clash.
 
 _tmux_profile_name() {
-  local profile
   profile=${1:-default}
 
   case "$profile" in
@@ -89,10 +88,10 @@ _tmux_profile_name() {
 
 tmux_profiles() {
   if [ -d "$HOME/.config/tmux/profiles" ]; then
-    find "$HOME/.config/tmux/profiles" -maxdepth 1 -type f -name '*.conf' -print |
-      sed 's#^.*/##' |
-      sed 's/\.conf$//' |
-      sort
+    find "$HOME/.config/tmux/profiles" -maxdepth 1 -type f -name '*.conf' -print \
+      | sed 's#^.*/##' \
+      | sed 's/\.conf$//' \
+      | sort
   else
     printf '%s\n' default
   fi
@@ -104,17 +103,20 @@ tmuxp() {
     return 127
   fi
 
-  local profile socket
   profile=$(_tmux_profile_name "$1")
   socket="profile-${profile}"
 
-  shift $(($# > 0 ? 1 : 0))
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
 
   if [ "$#" -gt 0 ]; then
     TMUX_PROFILE="$profile" tmux -L "$socket" "$@"
+    unset profile socket
     return
   fi
 
   # Default UX: attach to existing server or create a new session on this profile socket.
   TMUX_PROFILE="$profile" tmux -L "$socket" new-session -A -s main
+  unset profile socket
 }
