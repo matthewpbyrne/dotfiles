@@ -1,0 +1,60 @@
+* tmux profile-based setup
+
+This dotfiles repo now uses a profile-aware tmux layout with one stable entrypoint:
+
+- =~/.tmux.conf= (from =dot_tmux.conf=) stays small and sources shared + profile fragments.
+- Shared tmux config lives under =~/.config/tmux/common/=.
+- Profile config lives under =~/.config/tmux/profiles/=.
+- Optional machine-local overrides can live in =~/.config/tmux/local/overrides.conf=.
+
+** Available profiles
+
+- =default=: stable full setup (existing behavior migrated here)
+- =minimal=: debugging/baseline setup with minimal plugin usage
+- =experimental=: starts from default and allows opt-in experiments
+
+Add more profiles by creating another file in:
+
+- =~/.config/tmux/profiles/<name>.conf=
+
+** Why sockets are per profile
+
+tmux config is loaded by the tmux *server*, not each client.
+
+That means switching profiles safely requires separate tmux servers/sockets so
+an existing server does not keep using stale config.
+
+The helper uses:
+
+- =TMUX_PROFILE=<profile>= to select profile config
+- =tmux -L profile-<profile>= to isolate the tmux server socket
+
+** Launch helpers
+
+Shell helpers are defined in =~/.shell/functions.sh= (from =dot_shell/functions.sh=):
+
+- =tmuxp= -> launch default profile
+- =tmuxp minimal= -> launch minimal profile
+- =tmuxp experimental= -> launch experimental profile
+- =tmuxp <profile> new-window= -> pass tmux subcommands through profile socket
+- =tmux_profiles= -> list discovered profile names
+
+Default =tmuxp <profile>= behavior is:
+
+- attach to or create session =main= on socket =profile-<profile>=
+
+** Local machine overrides
+
+You can keep machine-specific tmux settings in:
+
+- =~/.config/tmux/local/overrides.conf=
+
+This file is sourced last and is intentionally ignored in the repo.
+
+** Reloading config
+
+Inside tmux, use:
+
+- =prefix r=
+
+This reloads =~/.tmux.conf= and displays the active profile in the message.
