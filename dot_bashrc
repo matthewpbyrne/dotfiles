@@ -22,7 +22,7 @@ fi
 # shellcheck source=/dev/null
 [ -f "$HOME/.shell/functions.sh" ] && . "$HOME/.shell/functions.sh"
 # shellcheck source=/dev/null
-[ -f "$HOME/.shell/functions_scratch.sh" ] && . "$HOME/.shell/functions_scratch.sh"
+[ -f "$HOME/.shell/functions_workspaces.sh" ] && . "$HOME/.shell/functions_workspaces.sh"
 
 # asdf via Homebrew
 if command -v brew >/dev/null 2>&1; then

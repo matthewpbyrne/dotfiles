@@ -19,7 +19,7 @@ fi
 # Shared shell files
 [ -f "$HOME/.shell/aliases.sh" ] && . "$HOME/.shell/aliases.sh"
 [ -f "$HOME/.shell/functions.sh" ] && . "$HOME/.shell/functions.sh"
-[ -f "$HOME/.shell/functions_scratch.sh" ] && . "$HOME/.shell/functions_scratch.sh"
+[ -f "$HOME/.shell/functions_workspaces.sh" ] && . "$HOME/.shell/functions_workspaces.sh"
 
 # Zsh-specific shell files
 [ -f "$ZDOTDIR/aliases.zsh" ] && . "$ZDOTDIR/aliases.zsh"
