@@ -97,7 +97,7 @@ tmux_profiles() {
 	fi
 }
 
-tmuxp() (
+tmux_profile() (
 	if ! command -v tmux >/dev/null 2>&1; then
 		printf '%s\n' 'tmux is not installed or not on PATH' >&2
 		return 127
