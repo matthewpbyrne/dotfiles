@@ -11,3 +11,6 @@
 
 # optional: machine-specific overrides
 *.local.sh
+
+# tmux local overrides
+.config/tmux/local/overrides.conf
