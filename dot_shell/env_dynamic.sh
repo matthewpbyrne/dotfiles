@@ -29,3 +29,9 @@ fi
 [ -n "${GOBIN:-}" ] && export PATH="$GOBIN:$PATH"
 
 command -v luarocks >/dev/null 2>&1 && eval "$(luarocks path)"
+
+# Keep tmux global PATH in sync so plugins (e.g. extrakto) launched in popups
+# can find tools installed by asdf, brew, etc.
+if [ -n "${TMUX:-}" ]; then
+	tmux set-environment -g PATH "$PATH" 2>/dev/null || true
+fi
