@@ -33,13 +33,16 @@ The helper uses:
 
 Shell helpers are defined in =~/.shell/functions.sh= (from =dot_shell/functions.sh=):
 
-- =tmuxp= -> launch default profile
-- =tmuxp minimal= -> launch minimal profile
-- =tmuxp experimental= -> launch experimental profile
-- =tmuxp <profile> new-window= -> pass tmux subcommands through profile socket
+- =tmux_profile= -> launch default profile
+- =tmux_profile minimal= -> launch minimal profile
+- =tmux_profile experimental= -> launch experimental profile
+- =tmux_profile <profile> new-window= -> pass tmux subcommands through profile socket
 - =tmux_profiles= -> list discovered profile names
 
-Default =tmuxp <profile>= behavior is:
+Note: the helper was named =tmuxp= in earlier versions; it was renamed to
+=tmux_profile= to avoid clashing with the [[https://github.com/tmux-python/tmuxp][tmuxp session manager]] CLI tool.
+
+Default =tmux_profile <profile>= behavior is:
 
 - attach to or create session =main= on socket =profile-<profile>=
 
@@ -50,6 +53,23 @@ You can keep machine-specific tmux settings in:
 - =~/.config/tmux/local/overrides.conf=
 
 This file is sourced last and is intentionally ignored in the repo.
+
+** Role of .tmux.conf and default.conf
+
+=~/.tmux.conf= (from =dot_tmux.conf=) is the stable *entrypoint* that tmux
+always loads.  It is intentionally small: it only resolves the active profile,
+sources shared fragments from =~/.config/tmux/common/=, and delegates to the
+appropriate profile file.
+
+=~/.config/tmux/profiles/default.conf= (from
+=dot_config/tmux/profiles/default.conf=) holds the *full, standard
+configuration* — plugins, theme, status-right format, etc.  When no
+=TMUX_PROFILE= is set (or when the requested profile file does not exist),
+=.tmux.conf= falls back to =default.conf= automatically.
+
+Other profile files (=minimal.conf=, =experimental.conf=, …) extend or
+replace parts of this default.  They are sourced *instead of* =default.conf=,
+so each profile file is fully self-contained.
 
 ** Reloading config
 
