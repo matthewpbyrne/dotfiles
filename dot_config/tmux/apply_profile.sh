@@ -19,11 +19,11 @@ if [ -z "$tmux_socket" ]; then
 fi
 
 if [ -n "$tmux_socket" ]; then
-	tmux -S "$tmux_socket" set -g @tmux_profile "$profile" \; \
+	tmux -S "$tmux_socket" set -s @tmux_profile "$profile" \; \
 		set-environment -g TMUX_PROFILE "$profile" \; \
 		source-file "$HOME/.config/tmux/profiles/$profile.conf"
 else
-	tmux set -g @tmux_profile "$profile" \; \
+	tmux set -s @tmux_profile "$profile" \; \
 		set-environment -g TMUX_PROFILE "$profile" \; \
 		source-file "$HOME/.config/tmux/profiles/$profile.conf"
 fi
