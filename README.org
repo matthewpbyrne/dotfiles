@@ -54,6 +54,13 @@ You can keep machine-specific tmux settings in:
 
 This file is sourced last and is intentionally ignored in the repo.
 
+** Requirements
+
+This profile-aware tmux entrypoint uses =run-shell -F= format expansion,
+which requires tmux 3.2 or newer. On systems with older tmux versions,
+this setup may fail to start; in that case, upgrade tmux or disable this
+profile-based entrypoint.
+
 ** Role of .tmux.conf and default.conf
 
 =~/.tmux.conf= (from =dot_tmux.conf=) is the stable *entrypoint* that tmux
@@ -68,8 +75,10 @@ configuration* — plugins, theme, status-right format, etc.  When no
 =.tmux.conf= falls back to =default.conf= automatically.
 
 Other profile files (=minimal.conf=, =experimental.conf=, …) extend or
-replace parts of this default.  They are sourced *instead of* =default.conf=,
-so each profile file is fully self-contained.
+replace parts of this default.  =~/.tmux.conf= delegates to the selected
+profile file instead of always sourcing =default.conf= directly, and each
+profile may either be fully self-contained or explicitly source
+=default.conf= and override portions of it.
 
 ** Reloading config
 
