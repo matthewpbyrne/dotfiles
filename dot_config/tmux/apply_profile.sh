@@ -13,17 +13,22 @@ if [ ! -f "$HOME/.config/tmux/profiles/$profile.conf" ]; then
 fi
 
 
+if ! tmux_bin=$(command -v tmux 2>/dev/null); then
+	echo "apply_profile.sh: tmux not found in PATH" >&2
+	exit 127
+fi
+
 tmux_socket=${TMUX_APPLY_SOCKET-}
 if [ -z "$tmux_socket" ]; then
 	tmux_socket=${TMUX%%,*}
 fi
 
 if [ -n "$tmux_socket" ]; then
-	tmux -S "$tmux_socket" set -s @tmux_profile "$profile" \; \
+	"$tmux_bin" -S "$tmux_socket" set -s @tmux_profile "$profile" \; \
 		set-environment -g TMUX_PROFILE "$profile" \; \
 		source-file "$HOME/.config/tmux/profiles/$profile.conf"
 else
-	tmux set -s @tmux_profile "$profile" \; \
+	"$tmux_bin" set -s @tmux_profile "$profile" \; \
 		set-environment -g TMUX_PROFILE "$profile" \; \
 		source-file "$HOME/.config/tmux/profiles/$profile.conf"
 fi
