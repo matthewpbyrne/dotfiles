@@ -12,7 +12,6 @@ if [ ! -f "$HOME/.config/tmux/profiles/$profile.conf" ]; then
 	profile=default
 fi
 
-
 tmux_socket=${TMUX_APPLY_SOCKET-}
 if [ -z "$tmux_socket" ]; then
 	tmux_socket=${TMUX%%,*}
