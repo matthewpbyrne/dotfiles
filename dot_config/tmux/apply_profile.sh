@@ -3,7 +3,7 @@
 profile=${TMUX_PROFILE-}
 
 case "$profile" in
-'' | *[!A-Za-z0-9_-]*)
+''|*[!A-Za-z0-9_-]*)
 	profile=default
 	;;
 esac
