@@ -13,13 +13,17 @@ if [ ! -f "$HOME/.config/tmux/profiles/$profile.conf" ]; then
 fi
 
 
-tmux_socket=${TMUX%%,*}
-tmux_socket_args=
-if [ -n "$tmux_socket" ]; then
-	tmux_socket_args="-S $tmux_socket"
+tmux_socket=${TMUX_APPLY_SOCKET-}
+if [ -z "$tmux_socket" ]; then
+	tmux_socket=${TMUX%%,*}
 fi
 
-# shellcheck disable=SC2086 # intentional word splitting for optional socket args
-tmux $tmux_socket_args set -g @tmux_profile "$profile" \; \
-	set-environment -g TMUX_PROFILE "$profile" \; \
-	source-file "$HOME/.config/tmux/profiles/$profile.conf"
+if [ -n "$tmux_socket" ]; then
+	tmux -S "$tmux_socket" set -g @tmux_profile "$profile" \; \
+		set-environment -g TMUX_PROFILE "$profile" \; \
+		source-file "$HOME/.config/tmux/profiles/$profile.conf"
+else
+	tmux set -g @tmux_profile "$profile" \; \
+		set-environment -g TMUX_PROFILE "$profile" \; \
+		source-file "$HOME/.config/tmux/profiles/$profile.conf"
+fi
