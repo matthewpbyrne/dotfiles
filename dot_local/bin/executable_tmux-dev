@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# tmux-dev: isolated tmux server for config/plugin testing
+#
+# Usage:
+#   tmux-dev [profile]
+#
+# Examples:
+#   tmux-dev
+#   tmux-dev debug
+#   tmux-dev minimal
+
+set -euo pipefail
+
+PROFILE="${1:-dev}"
+SOCKET="tmux-${PROFILE}"
+CONFIG="${HOME}/.config/tmux/tmux.conf"
+
+export TMUX_PROFILE="${PROFILE}"
+
+if tmux -L "${SOCKET}" has-session 2>/dev/null; then
+	exec tmux -L "${SOCKET}" attach
+else
+	exec tmux -L "${SOCKET}" -f "${CONFIG}" new-session
+fi

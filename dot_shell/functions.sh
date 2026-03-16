@@ -36,7 +36,7 @@ dotfiles() {
 	_open_files \
 		"$HOME/.profile" \
 		"$HOME/.bashrc" \
-		"$HOME/.tmux.conf" \
+		"$HOME/.config/tmux/tmux.conf" \
 		"$HOME/.shell/"* \
 		"${ZDOTDIR:-$HOME}/.zshrc"
 }
