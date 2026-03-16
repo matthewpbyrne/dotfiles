@@ -65,7 +65,8 @@ which requires tmux 3.2 or newer. On systems with older tmux versions,
 this setup may fail to start; in that case, upgrade tmux or disable this
 profile-based entrypoint.
 
-PATH propagation in this setup uses tmux-native format expansion: =set-environment -gF PATH "#{env:PATH}"=.
+PATH propagation in this setup uses tmux-native format expansion with a non-empty
+PATH guard: ~if-shell -F "#{env:PATH}" "set-environment -gF PATH \"#{env:PATH}\"" ""~.
 
 ** Role of .tmux.conf and default.conf
 
