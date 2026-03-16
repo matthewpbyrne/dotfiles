@@ -14,6 +14,10 @@ if command -v brew >/dev/null 2>&1; then
 	fi
 fi
 
+# Force asdf shims/bin to the front
+export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
+export PATH="$ASDF_DATA_DIR/shims:$PATH"
+
 if command -v go >/dev/null 2>&1; then
 	GOBIN="$(go env GOBIN 2>/dev/null)"
 	if [ -z "$GOBIN" ]; then
