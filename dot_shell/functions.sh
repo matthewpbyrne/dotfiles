@@ -73,17 +73,17 @@ dcupd() {
 # config stays server-scoped and does not clash.
 
 _tmux_profile_name() (
-	tmuxp_profile=${1:-default}
+	tmux_profile=${1:-default}
 
-	case "$tmuxp_profile" in
+	case "$tmux_profile" in
 	*[!A-Za-z0-9_-]* | '')
-		printf '%s\n' "invalid tmux profile '$tmuxp_profile' (allowed: A-Za-z0-9_-); using default" >&2
+		printf '%s\n' "invalid tmux profile '$tmux_profile' (allowed: A-Za-z0-9_-); using default" >&2
 		printf '%s' default
 		return
 		;;
 	esac
 
-	printf '%s' "$tmuxp_profile"
+	printf '%s' "$tmux_profile"
 )
 
 tmux_profiles() {
@@ -103,19 +103,19 @@ tmux_profile() (
 		return 127
 	fi
 
-	tmuxp_profile=$(_tmux_profile_name "$1")
-	tmuxp_socket="profile-${tmuxp_profile}"
+	tmux_profile=$(_tmux_profile_name "$1")
+	tmux_socket="profile-${tmux_profile}"
 
 	if [ "$#" -gt 0 ]; then
 		shift
 	fi
 
 	if [ "$#" -gt 0 ]; then
-		TMUX_PROFILE="$tmuxp_profile" tmux -L "$tmuxp_socket" "$@"
+		TMUX_PROFILE="$tmux_profile" tmux -L "$tmux_socket" "$@"
 		return $?
 	fi
 
 	# Default UX: attach to existing server or create a new session on this profile socket.
-	TMUX_PROFILE="$tmuxp_profile" tmux -L "$tmuxp_socket" new-session -A -s main
+	TMUX_PROFILE="$tmux_profile" tmux -L "$tmux_socket" new-session -A -s main
 	return $?
 )
