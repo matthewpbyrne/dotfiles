@@ -29,6 +29,10 @@ The helper uses:
 - =TMUX_PROFILE=<profile>= to select profile config
 - =tmux -L profile-<profile>= to isolate the tmux server socket
 
+Profile name tracking uses the tmux user option =@tmux_profile= via
+=set -g= (global-session default scope), which is what status/reload templates
+read via =#{@tmux_profile}=.
+
 ** Launch helpers
 
 Shell helpers are defined in =~/.shell/functions.sh= (from =dot_shell/functions.sh=):
@@ -60,6 +64,8 @@ This profile-aware tmux entrypoint uses =run-shell -F= format expansion,
 which requires tmux 3.2 or newer. On systems with older tmux versions,
 this setup may fail to start; in that case, upgrade tmux or disable this
 profile-based entrypoint.
+
+PATH propagation in this setup uses tmux-native format expansion: =set-environment -gF PATH "#{env:PATH}"=.
 
 ** Role of .tmux.conf and default.conf
 
