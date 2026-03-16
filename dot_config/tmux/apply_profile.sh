@@ -17,6 +17,8 @@ if [ -z "$tmux_socket" ]; then
 	tmux_socket=${TMUX%%,*}
 fi
 
+# Record active profile as a tmux user option via global-session default scope.
+# Keep this aligned with #{@tmux_profile} reads in status/reload templates.
 if [ -n "$tmux_socket" ]; then
 	tmux -S "$tmux_socket" set -g @tmux_profile "$profile" \; \
 		set-environment -g TMUX_PROFILE "$profile" \; \
