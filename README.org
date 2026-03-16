@@ -43,8 +43,7 @@ Shell helpers are defined in =~/.shell/functions.sh= (from =dot_shell/functions.
 - =tmux_profile <profile> new-window= -> pass tmux subcommands through profile socket
 - =tmux_profiles= -> list discovered profile names
 
-Note: the helper was named =tmuxp= in earlier versions; it was renamed to
-=tmux_profile= to avoid clashing with the [[https://github.com/tmux-python/tmuxp][tmuxp session manager]] CLI tool.
+Note: the helper was named =tmux_profile= to avoid clashing with the [[https://github.com/tmux-python/tmuxp][tmuxp session manager]] CLI tool.
 
 Default =tmux_profile <profile>= behavior is:
 
