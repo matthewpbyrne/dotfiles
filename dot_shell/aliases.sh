@@ -9,6 +9,7 @@ elif command -v exa >/dev/null 2>&1; then
 	alias ls='exa --long --header --icons --git'
 fi
 
+alias fd=fdfind
 alias rr='ranger'
 alias lg='lazygit'
 alias xo='xdg-open'
