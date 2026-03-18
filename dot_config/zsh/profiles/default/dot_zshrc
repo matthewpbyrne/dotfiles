@@ -6,6 +6,11 @@
 # Emacs-style command-line editing
 bindkey -e
 
+# NOTE: Zsh plugins read shell variables directly.
+# Autosuggestions appearance
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 # Shared shell files
 [ -f "$HOME/.shell/aliases.sh" ] && . "$HOME/.shell/aliases.sh"
 [ -f "$HOME/.shell/functions.sh" ] && . "$HOME/.shell/functions.sh"
@@ -31,32 +36,24 @@ else
   compinit
 fi
 
-# Antigen / Oh My Zsh
-if [ -f "$HOME/.local/lib/antigen.zsh" ]; then
-  source "$HOME/.local/lib/antigen.zsh"
+# Antidote / Oh My Zsh-compatible plugins
+ANTIDOTE_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/antidote"
+ZSH_PLUGINS_FILE="${ZDOTDIR:-$HOME}/.zsh_plugins.txt"
+ZSH_PLUGINS_BUNDLE="${ZDOTDIR:-$HOME}/.zsh_plugins.zsh"
 
-  antigen use oh-my-zsh
+if [ -f "$ANTIDOTE_HOME/antidote.zsh" ] && [ -f "$ZSH_PLUGINS_FILE" ]; then
+  if [ ! -f "$ZSH_PLUGINS_BUNDLE" ] || [ "$ZSH_PLUGINS_FILE" -nt "$ZSH_PLUGINS_BUNDLE" ]; then
+    (
+      source "$ANTIDOTE_HOME/antidote.zsh"
+      antidote bundle < "$ZSH_PLUGINS_FILE" > "$ZSH_PLUGINS_BUNDLE"
+    )
+  fi
 
-  antigen bundles <<'EOBUNDLES'
-command-not-found
-docker
-fasd
-fzf
-git
-gitignore
-lein
-pip
-zsh-users/zsh-completions
-zsh-users/zsh-syntax-highlighting
-EOBUNDLES
-
-  antigen theme amuse
-  antigen apply
+  source "$ZSH_PLUGINS_BUNDLE"
 fi
 
 # PATH hygiene
 typeset -U path
-path=(${path:#$HOME/.antigen/bundles/*})
 path=(${path:#""})
 export PATH
 
