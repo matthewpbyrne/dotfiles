@@ -59,3 +59,11 @@ export PATH
 
 # direnv
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+
+# prompt
+if command -v starship >/dev/null 2>&1; then
+  export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
+  eval "$(starship init zsh)"
+else
+  PROMPT='%n@%m:%~ %# '
+fi
