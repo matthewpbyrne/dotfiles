@@ -7,8 +7,8 @@
 bindkey -e
 
 # NOTE: Zsh plugins read shell variables directly.
-# Autosuggestions appearance
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
+# Theming, including autosuggestions
+[ -f "$HOME/.config/zsh/themes/tokyo-night-storm.zsh" ] && . "$HOME/.config/zsh/themes/tokyo-night-storm.zsh"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # Shared shell files
