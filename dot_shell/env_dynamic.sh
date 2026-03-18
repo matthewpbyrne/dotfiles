@@ -5,15 +5,6 @@ if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
 	export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 fi
 
-# asdf via Homebrew
-if command -v brew >/dev/null 2>&1; then
-	ASDF_PREFIX="$(brew --prefix asdf 2>/dev/null)"
-	if [ -n "$ASDF_PREFIX" ] && [ -f "$ASDF_PREFIX/libexec/asdf.sh" ]; then
-		# shellcheck source=/dev/null
-		. "$ASDF_PREFIX/libexec/asdf.sh"
-	fi
-fi
-
 # Force asdf shims/bin to the front
 export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
 export PATH="$ASDF_DATA_DIR/shims:$PATH"
