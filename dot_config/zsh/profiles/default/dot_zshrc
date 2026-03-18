@@ -3,6 +3,9 @@
 # Shared static environment + secrets
 [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
+# Emacs-style command-line editing
+bindkey -e
+
 # Shared shell files
 [ -f "$HOME/.shell/aliases.sh" ] && . "$HOME/.shell/aliases.sh"
 [ -f "$HOME/.shell/functions.sh" ] && . "$HOME/.shell/functions.sh"
@@ -67,3 +70,15 @@ if command -v starship >/dev/null 2>&1; then
 else
   PROMPT='%n@%m:%~ %# '
 fi
+
+# Reassert preferred bindings after plugin/framework init
+bindkey -e
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey '^P' up-line-or-history
+bindkey '^N' down-line-or-history
+
+# Edit current command in $EDITOR
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
