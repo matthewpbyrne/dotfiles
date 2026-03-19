@@ -2,7 +2,6 @@
 
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export WORKSPACE_HOME="$HOME/tmp/workspaces"
-export PATH="$HOME/.local/bin:$PNPM_HOME:/home/linuxbrew/.linuxbrew/bin:/usr/local/bin:/usr/bin:/bin:/snap/bin${PATH:+:$PATH}"
 
 if command -v nvim >/dev/null 2>&1; then
 	EDITOR="$(command -v nvim)"
