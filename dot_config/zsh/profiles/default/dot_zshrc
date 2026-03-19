@@ -52,6 +52,9 @@ if [ -f "$ANTIDOTE_HOME/antidote.zsh" ] && [ -f "$ZSH_PLUGINS_FILE" ]; then
   source "$ZSH_PLUGINS_BUNDLE"
 fi
 
+# Apply shared PATH ordering
+[ -f "$HOME/.config/zsh/path_order.zsh" ] && . "$HOME/.config/zsh/path_order.zsh"
+
 # PATH hygiene
 typeset -U path
 path=(${path:#""})

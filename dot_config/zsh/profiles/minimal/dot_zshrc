@@ -2,4 +2,7 @@
 
 [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
+# Apply shared PATH ordering
+[ -f "$HOME/.config/zsh/path_order.zsh" ] && . "$HOME/.config/zsh/path_order.zsh"
+
 PS1='%n@%m:%~$ '
