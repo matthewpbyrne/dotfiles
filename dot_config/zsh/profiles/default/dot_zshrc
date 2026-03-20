@@ -23,17 +23,14 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 # Optional ghcup
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
 
-# Dynamic/tool-dependent environment
-[ -f "$HOME/.shell/env_dynamic.sh" ] && . "$HOME/.shell/env_dynamic.sh"
-
 # Completion
 autoload -Uz compinit
 zstyle ':completion:*' menu select
 
 if [ -f "${ZDOTDIR:-$HOME}/.zcompdump" ]; then
-  compinit -C
+	compinit -C
 else
-  compinit
+	compinit
 fi
 
 # Antidote / Oh My Zsh-compatible plugins
@@ -42,33 +39,28 @@ ZSH_PLUGINS_FILE="${ZDOTDIR:-$HOME}/.zsh_plugins.txt"
 ZSH_PLUGINS_BUNDLE="${ZDOTDIR:-$HOME}/.zsh_plugins.zsh"
 
 if [ -f "$ANTIDOTE_HOME/antidote.zsh" ] && [ -f "$ZSH_PLUGINS_FILE" ]; then
-  if [ ! -f "$ZSH_PLUGINS_BUNDLE" ] || [ "$ZSH_PLUGINS_FILE" -nt "$ZSH_PLUGINS_BUNDLE" ]; then
-    (
-      source "$ANTIDOTE_HOME/antidote.zsh"
-      antidote bundle < "$ZSH_PLUGINS_FILE" > "$ZSH_PLUGINS_BUNDLE"
-    )
-  fi
+	if [ ! -f "$ZSH_PLUGINS_BUNDLE" ] || [ "$ZSH_PLUGINS_FILE" -nt "$ZSH_PLUGINS_BUNDLE" ]; then
+		(
+			source "$ANTIDOTE_HOME/antidote.zsh"
+			antidote bundle <"$ZSH_PLUGINS_FILE" >"$ZSH_PLUGINS_BUNDLE"
+		)
+	fi
 
-  source "$ZSH_PLUGINS_BUNDLE"
+	source "$ZSH_PLUGINS_BUNDLE"
 fi
 
 # Apply shared PATH ordering
 [ -f "$HOME/.config/zsh/path_order.zsh" ] && . "$HOME/.config/zsh/path_order.zsh"
 
-# PATH hygiene
-typeset -U path
-path=(${path:#""})
-export PATH
-
 # direnv
-(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+(($ + commands[direnv])) && eval "$(direnv hook zsh)"
 
 # prompt
 if command -v starship >/dev/null 2>&1; then
-  export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
-  eval "$(starship init zsh)"
+	export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
+	eval "$(starship init zsh)"
 else
-  PROMPT='%n@%m:%~ %# '
+	PROMPT='%n@%m:%~ %# '
 fi
 
 # Reassert preferred bindings after plugin/framework init
