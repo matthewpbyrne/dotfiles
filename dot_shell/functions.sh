@@ -44,9 +44,9 @@ dotfiles() {
 # Containers
 
 ctr() {
-	if type -P podman >/dev/null 2>&1; then
+	if command -v podman >/dev/null 2>&1; then
 		podman "$@"
-	elif type -P docker >/dev/null 2>&1; then
+	elif command -v docker >/dev/null 2>&1; then
 		docker "$@"
 	else
 		printf 'ctr: no container CLI found\n' >&2
@@ -55,11 +55,11 @@ ctr() {
 }
 
 dcupd() {
-	if type -P podman-compose >/dev/null 2>&1; then
+	if command -v podman-compose >/dev/null 2>&1; then
 		podman-compose up -d "$@"
-	elif type -P docker >/dev/null 2>&1; then
+	elif command -v docker >/dev/null 2>&1; then
 		docker compose up -d "$@"
-	elif type -P docker-compose >/dev/null 2>&1; then
+	elif command -v docker-compose >/dev/null 2>&1; then
 		docker-compose up -d "$@"
 	else
 		printf 'dcupd: no supported compose tool found\n' >&2
