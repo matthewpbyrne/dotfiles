@@ -1,38 +1,25 @@
 # shellcheck shell=sh
 
-# Force asdf shims/bin to the front
+# Tool-managed base dirs
 export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
 
-# Prepend asdf shims and bin to PATH (bash won't see zsh-only path_order.zsh)
-asdf_shims="$ASDF_DATA_DIR/shims"
-asdf_bin="$ASDF_DATA_DIR/bin"
-for asdf_dir in "$asdf_shims" "$asdf_bin"; do
-	if [ -d "$asdf_dir" ]; then
-		case ":$PATH:" in
-			*":$asdf_dir:"*) ;;
-			*) PATH="$asdf_dir:$PATH" ;;
-		esac
-	fi
-done
-export PATH
+# Go-derived environment
 if command -v go >/dev/null 2>&1; then
 	GOBIN="$(go env GOBIN 2>/dev/null)"
 	if [ -z "$GOBIN" ]; then
 		GOPATH="$(go env GOPATH 2>/dev/null)"
-		GOBIN="${GOPATH%%:*}/bin"
+		[ -n "$GOPATH" ] && GOBIN="${GOPATH%%:*}/bin"
 	fi
-	export GOBIN
-
-	GOROOT="$(go env GOROOT)"
-	export GOROOT
+	[ -n "${GOBIN:-}" ] && export GOBIN
 fi
 
-if luarocks --version >/dev/null 2>&1; then
-	eval "$(luarocks path)"
+# LuaRocks environment
+if command -v luarocks >/dev/null 2>&1; then
+	eval "$(luarocks path --shell=sh 2>/dev/null)"
 fi
 
-# Keep tmux global PATH in sync so plugins (e.g. extrakto) launched in popups
-# can find tools installed by asdf, brew, etc.
+# Keep tmux global PATH in sync so plugins launched in tmux popups
+# can find tools installed by asdf, Homebrew, etc.
 if [ -n "${TMUX:-}" ]; then
 	tmux set-environment -g PATH "$PATH" 2>/dev/null || true
 fi
