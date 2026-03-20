@@ -1,0 +1,35 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.sh]
+indent_style = space
+indent_size = 2
+shell_variant = bash
+switch_case_indent = true
+space_redirects = true
+binary_next_line = false
+function_next_line = false
+
+[*.zsh]
+indent_style = space
+indent_size = 2
+shell_variant = zsh
+switch_case_indent = true
+space_redirects = true
+binary_next_line = false
+function_next_line = false
+
+# Files you do not want shfmt to touch
+[dot_config/zsh/path_order.zsh]
+ignore = true
+
+[dot_config/zsh/profiles/default/dot_zshrc]
+ignore = true
+
+[*.md]
+trim_trailing_whitespace = false
