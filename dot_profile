@@ -12,3 +12,7 @@
 # Optional environment manager
 # shellcheck source=/dev/null
 [ -s "$HOME/.config/envman/load.sh" ] && . "$HOME/.config/envman/load.sh"
+
+# Shared dynamic/tool-dependent environment
+# shellcheck source=/dev/null
+[ -f "$HOME/.shell/env_dynamic.sh" ] && . "$HOME/.shell/env_dynamic.sh"
