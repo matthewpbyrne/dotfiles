@@ -11,13 +11,13 @@ if [ -z "${PATH:-}" ]; then
 fi
 
 case ":$PATH:" in
-	*":$HOME/.local/bin:"*) ;;
-	*) PATH="$HOME/.local/bin:$PATH" ;;
+*":$HOME/.local/bin:"*) ;;
+*) PATH="$HOME/.local/bin:$PATH" ;;
 esac
 
 case ":$PATH:" in
-	*":$PNPM_HOME:"*) ;;
-	*) PATH="$PNPM_HOME:$PATH" ;;
+*":$PNPM_HOME:"*) ;;
+*) PATH="$PNPM_HOME:$PATH" ;;
 esac
 
 export PATH
