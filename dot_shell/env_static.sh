@@ -26,7 +26,7 @@ if command -v nvim >/dev/null 2>&1; then
 elif command -v vim >/dev/null 2>&1; then
 	EDITOR="$(command -v vim)"
 else
-	EDITOR="$(command -v vi)"
+	EDITOR='vi'
 fi
 export EDITOR
 
