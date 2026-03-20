@@ -7,10 +7,12 @@ export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
 asdf_shims="$ASDF_DATA_DIR/shims"
 asdf_bin="$ASDF_DATA_DIR/bin"
 for asdf_dir in "$asdf_shims" "$asdf_bin"; do
-	case ":$PATH:" in
-		*":$asdf_dir:"*) ;;
-		*) PATH="$asdf_dir:$PATH" ;;
-	esac
+	if [ -d "$asdf_dir" ]; then
+		case ":$PATH:" in
+			*":$asdf_dir:"*) ;;
+			*) PATH="$asdf_dir:$PATH" ;;
+		esac
+	fi
 done
 export PATH
 if command -v go >/dev/null 2>&1; then
