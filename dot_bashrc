@@ -19,10 +19,6 @@ esac
 # shellcheck source=/dev/null
 [ -f "$HOME/.shell/functions_workspaces.sh" ] && . "$HOME/.shell/functions_workspaces.sh"
 
-# Dynamic environment (after tools exist)
-# shellcheck source=/dev/null
-[ -f "$HOME/.shell/env_dynamic.sh" ] && . "$HOME/.shell/env_dynamic.sh"
-
 # direnv
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
 

@@ -3,6 +3,17 @@
 # Shared static environment + secrets
 [ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
+# zsh PATH cleanup (dedupe PATH entries)
+[ -f "$HOME/.config/zsh/zsh_path_dedupe.zsh" ] && . "$HOME/.config/zsh/zsh_path_dedupe.zsh"
+
+# Emacs-style command-line editing
+bindkey -e
+
+# NOTE: Zsh plugins read shell variables directly.
+# Autosuggestions appearance
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 # Shared shell files
 [ -f "$HOME/.shell/aliases.sh" ] && . "$HOME/.shell/aliases.sh"
 [ -f "$HOME/.shell/functions.sh" ] && . "$HOME/.shell/functions.sh"
@@ -15,47 +26,93 @@
 # Optional ghcup
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
 
-# Dynamic/tool-dependent environment
-[ -f "$HOME/.shell/env_dynamic.sh" ] && . "$HOME/.shell/env_dynamic.sh"
+# Antidote / Oh My Zsh-compatible plugins
+ANTIDOTE_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/antidote"
+ZSH_PLUGINS_FILE="${ZDOTDIR:-$HOME}/.zsh_plugins.txt"
+ZSH_PLUGINS_BUNDLE="${ZDOTDIR:-$HOME}/.zsh_plugins.zsh"
+ZSH_PLUGINS_LATE_FILE="${ZDOTDIR:-$HOME}/.zsh_plugins_late.txt"
+ZSH_PLUGINS_LATE_BUNDLE="${ZDOTDIR:-$HOME}/.zsh_plugins_late.zsh"
+
+build_antidote_bundle() {
+  local plugins_file="$1"
+  local bundle_file="$2"
+  local tmp_bundle
+
+  [ -f "$ANTIDOTE_HOME/antidote.zsh" ] || return 0
+  [ -f "$plugins_file" ] || return 0
+
+  if [ ! -f "$bundle_file" ] || [ "$plugins_file" -nt "$bundle_file" ]; then
+    (
+      source "$ANTIDOTE_HOME/antidote.zsh" || exit 1
+      tmp_bundle="$(mktemp "${bundle_file}.XXXXXX")" || exit 1
+      trap 'rm -f "$tmp_bundle"' EXIT
+
+      if antidote bundle <"$plugins_file" >"$tmp_bundle"; then
+        mv "$tmp_bundle" "$bundle_file"
+        trap - EXIT
+      else
+        exit 1
+      fi
+    )
+  fi
+}
+
+build_antidote_bundle "$ZSH_PLUGINS_FILE" "$ZSH_PLUGINS_BUNDLE"
+[ -f "$ZSH_PLUGINS_BUNDLE" ] && source "$ZSH_PLUGINS_BUNDLE"
+
+build_antidote_bundle "$ZSH_PLUGINS_LATE_FILE" "$ZSH_PLUGINS_LATE_BUNDLE"
 
 # Completion
 autoload -Uz compinit
 zstyle ':completion:*' menu select
 
 if [ -f "${ZDOTDIR:-$HOME}/.zcompdump" ]; then
-  compinit -C
+	compinit -C
 else
-  compinit
+	compinit
 fi
-
-# Antigen / Oh My Zsh
-if [ -f "$HOME/.local/lib/antigen.zsh" ]; then
-  source "$HOME/.local/lib/antigen.zsh"
-
-  antigen use oh-my-zsh
-
-  antigen bundles <<'EOBUNDLES'
-command-not-found
-docker
-fasd
-fzf
-git
-gitignore
-lein
-pip
-zsh-users/zsh-completions
-zsh-users/zsh-syntax-highlighting
-EOBUNDLES
-
-  antigen theme amuse
-  antigen apply
-fi
-
-# PATH hygiene
-typeset -U path
-path=(${path:#$HOME/.antigen/bundles/*})
-path=(${path:#""})
-export PATH
 
 # direnv
-(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+if (( $+commands[direnv] )); then
+  eval "$(direnv hook zsh)"
+fi
+
+# fzf integration
+if command -v fzf >/dev/null 2>&1; then
+  if fzf_zsh="$(fzf --zsh 2>/dev/null)"; then
+    eval "$fzf_zsh"
+    unset fzf_zsh
+  else
+    for f in \
+      /usr/share/fzf/key-bindings.zsh \
+      /usr/share/fzf/completion.zsh \
+      /opt/homebrew/opt/fzf/shell/key-bindings.zsh \
+      /opt/homebrew/opt/fzf/shell/completion.zsh
+    do
+      [[ -f "$f" ]] && source "$f"
+    done
+  fi
+fi
+
+# prompt
+if command -v starship >/dev/null 2>&1; then
+	export STARSHIP_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"
+	eval "$(starship init zsh)"
+else
+	PROMPT='%n@%m:%~ %# '
+fi
+
+# Reassert preferred bindings after plugin/framework init
+bindkey -e
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey '^P' up-line-or-history
+bindkey '^N' down-line-or-history
+
+# Edit current command in $EDITOR
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^X^E' edit-command-line
+
+# Load late plugins (syntax highlighting etc.)
+[ -f "$ZSH_PLUGINS_LATE_BUNDLE" ] && source "$ZSH_PLUGINS_LATE_BUNDLE"

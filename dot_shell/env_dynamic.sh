@@ -1,41 +1,46 @@
 # shellcheck shell=sh
 
-# Ensure Homebrew is on PATH if available
-if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-	export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-fi
-
-# asdf via Homebrew
-if command -v brew >/dev/null 2>&1; then
-	ASDF_PREFIX="$(brew --prefix asdf 2>/dev/null)"
-	if [ -n "$ASDF_PREFIX" ] && [ -f "$ASDF_PREFIX/libexec/asdf.sh" ]; then
-		# shellcheck source=/dev/null
-		. "$ASDF_PREFIX/libexec/asdf.sh"
-	fi
-fi
-
-# Force asdf shims/bin to the front
+# Tool-managed base dirs
 export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
-export PATH="$ASDF_DATA_DIR/shims:$PATH"
 
+# Preferred editor (PATH-dependent)
+if command -v nvim >/dev/null 2>&1; then
+	EDITOR="$(command -v nvim)"
+elif command -v vim >/dev/null 2>&1; then
+	EDITOR="$(command -v vim)"
+elif command -v vi >/dev/null 2>&1; then
+	EDITOR="$(command -v vi)"
+else
+	EDITOR="vi"
+fi
+export EDITOR
+
+if [ -z "${VISUAL:-}" ]; then
+	VISUAL="$EDITOR"
+fi
+export VISUAL
+
+# Go-derived environment
 if command -v go >/dev/null 2>&1; then
 	GOBIN="$(go env GOBIN 2>/dev/null)"
 	if [ -z "$GOBIN" ]; then
 		GOPATH="$(go env GOPATH 2>/dev/null)"
-		GOBIN="${GOPATH%%:*}/bin"
+		[ -n "$GOPATH" ] && GOBIN="${GOPATH%%:*}/bin"
 	fi
-	export GOBIN
 
-	GOROOT="$(go env GOROOT)"
-	export GOROOT
+	if [ -n "${GOBIN:-}" ]; then
+		export GOBIN
+		add_tool_path "$GOBIN"
+	fi
 fi
 
-[ -n "${GOBIN:-}" ] && export PATH="$GOBIN:$PATH"
+# LuaRocks environment
+if command -v luarocks >/dev/null 2>&1; then
+	eval "$(luarocks path --shell=sh 2>/dev/null)"
+fi
 
-command -v luarocks >/dev/null 2>&1 && eval "$(luarocks path)"
-
-# Keep tmux global PATH in sync so plugins (e.g. extrakto) launched in popups
-# can find tools installed by asdf, brew, etc.
+# Keep tmux global PATH in sync so plugins launched in tmux popups
+# can find tools installed by asdf, Homebrew, etc.
 if [ -n "${TMUX:-}" ]; then
 	tmux set-environment -g PATH "$PATH" 2>/dev/null || true
 fi

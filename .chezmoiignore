@@ -12,5 +12,7 @@
 # optional: machine-specific overrides
 *.local.sh
 
-# docs
+# repo-only helper files
+Makefile
+.editorconfig
 *.md

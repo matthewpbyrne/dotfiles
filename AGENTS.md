@@ -6,7 +6,9 @@ This repository is a chezmoi source-state repository.
 
 The repo root is intended to live at:
 
-    ~/.local/share/chezmoi
+```
+~/.local/share/chezmoi
+```
 
 Changes should be made to the source-state files in this repository and then applied to the target home directory with `chezmoi apply`.
 
@@ -126,10 +128,10 @@ Use `shellcheck` primarily for `dot_profile`, `dot_bashrc`, and `dot_shell/*.sh`
 Typical workflow:
 
 1. edit source-state files in this repo
-2. run formatting / linting where appropriate
-3. run `chezmoi diff` to inspect target-state changes that would be applied
-4. run `chezmoi apply`
-5. optionally run `chezmoi diff` again to confirm the applied state is clean
+1. run formatting / linting where appropriate
+1. run `chezmoi diff` to inspect target-state changes that would be applied
+1. run `chezmoi apply`
+1. optionally run `chezmoi diff` again to confirm the applied state is clean
 
 `chezmoi diff` is still useful in this repo because it shows how the source state differs from the current applied target state, including permission drift and local changes.
 
@@ -182,6 +184,6 @@ Examples:
 Prefer:
 
 1. short explanation of the issue
-2. minimal patch
-3. validation steps
-4. suggested commit message
+1. minimal patch
+1. validation steps
+1. suggested commit message
