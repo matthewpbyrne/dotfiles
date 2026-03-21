@@ -35,5 +35,5 @@ alias vimrc='$EDITOR $HOME/.config/nvim/init.lua'
 # Shell / dotfiles
 alias conf_aliases='$EDITOR ~/.shell/aliases.sh'
 alias conf_functions='$EDITOR ~/.shell/functions.sh'
-alias conf_tmux='$EDITOR ~/.tmux.conf'
+alias conf_tmux='$EDITOR ~/.config/tmux/tmux.conf'
 alias zshrc='$EDITOR ${ZDOTDIR:-$HOME}/.zshrc'

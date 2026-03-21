@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# tmux-work: create or attach to a project workspace session
+#
+# Usage:
+#   tmux-work [session-name] [project-dir]
+
+set -euo pipefail
+
+DIR="${2:-$PWD}"
+SESSION="${1:-$(basename "$DIR")}"
+
+if tmux has-session -t "=${SESSION}" 2>/dev/null; then
+	exec tmux attach-session -t "=${SESSION}"
+fi
+
+tmux new-session -d -s "${SESSION}" -c "${DIR}" -n editor
+tmux new-window -t "${SESSION}:" -c "${DIR}" -n shell
+tmux new-window -t "${SESSION}:" -c "${DIR}" -n git
+tmux new-window -t "${SESSION}:" -c "${DIR}" -n tests
+tmux new-window -t "${SESSION}:" -c "${DIR}" -n logs
+
+tmux send-keys -t "${SESSION}:editor" 'nvim .' C-m
+tmux send-keys -t "${SESSION}:git" 'git status' C-m
+
+if [ -f "${DIR}/package.json" ]; then
+	tmux send-keys -t "${SESSION}:tests" 'pnpm test' C-m
+elif [ -f "${DIR}/pyproject.toml" ]; then
+	tmux send-keys -t "${SESSION}:tests" 'pytest' C-m
+elif [ -f "${DIR}/go.mod" ]; then
+	tmux send-keys -t "${SESSION}:tests" 'go test ./...' C-m
+fi
+
+if [ -d "${DIR}/logs" ]; then
+	tmux send-keys -t "${SESSION}:logs" 'ls -lah logs' C-m
+else
+	tmux send-keys -t "${SESSION}:logs" 'printf "No logs directory\n"' C-m
+fi
+
+tmux select-window -t "${SESSION}:editor"
+exec tmux attach-session -t "=${SESSION}"
