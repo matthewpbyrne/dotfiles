@@ -19,4 +19,5 @@ vim.g.loaded_perl_provider = 0
 
 -- enable project-local config via  .nvim.lua, .nvimrc, or .exrc
 vim.o.exrc = true
+vim.o.secure = true
 vim.g.autoformat = true
