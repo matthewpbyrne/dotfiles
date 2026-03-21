@@ -14,5 +14,5 @@ if [ ! -d "$THEME_DIR/.git" ]; then
   git clone https://github.com/alacritty/alacritty-theme "$THEME_DIR"
 else
   echo "Updating Alacritty themes..."
-  git -C "$THEME_DIR" pull --ff-only || true
+  git -C "$THEME_DIR" pull --ff-only
 fi
