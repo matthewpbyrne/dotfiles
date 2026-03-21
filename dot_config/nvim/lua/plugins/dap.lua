@@ -1,9 +1,5 @@
 return {
   {
-    "mfussenegger/nvim-dap",
-  },
-
-  {
     "mfussenegger/nvim-dap-python",
     ft = "python",
     config = function()
