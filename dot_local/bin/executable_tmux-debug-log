@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# tmux-debug-log: launch an isolated tmux server with verbose logs
+#
+# Usage:
+#   tmux-debug-log [profile]
+#
+# Examples:
+#   tmux-debug-log
+#   tmux-debug-log crash
+
+set -euo pipefail
+
+PROFILE="${1:-debug}"
+SOCKET="tmux-${PROFILE}"
+CONFIG="${HOME}/.config/tmux/tmux.conf"
+LOG_DIR="${XDG_STATE_HOME:-${HOME}/.local/state}/tmux/${PROFILE}"
+
+mkdir -p "${LOG_DIR}"
+cd "${LOG_DIR}"
+
+printf 'tmux verbose logs will be written under %s\n' "${LOG_DIR}"
+printf 'attach with: tmux -L %s attach\n' "${SOCKET}"
+
+exec tmux -vv -L "${SOCKET}" -f "${CONFIG}" new-session
