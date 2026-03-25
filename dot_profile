@@ -13,6 +13,10 @@
 # shellcheck source=/dev/null
 [ -s "$HOME/.config/envman/load.sh" ] && . "$HOME/.config/envman/load.sh"
 
+# Tool manager defaults (defensive fallback if env_static.sh was not sourced)
+: "${MISE_DATA_DIR:=${XDG_DATA_HOME:-$HOME/.local/share}/mise}"
+export MISE_DATA_DIR
+
 : "${PATH:=}"
 
 path_prepend() {
@@ -56,7 +60,7 @@ path_prepend_if_dir "/usr/local/bin"
 path_prepend_if_dir "/home/linuxbrew/.linuxbrew/bin"
 
 # language managers
-path_prepend "$MISE_DATA_DIR/shims"
+path_prepend_if_dir "$MISE_DATA_DIR/shims"
 
 # package managers
 path_prepend "${PNPM_HOME:-$HOME/.local/share/pnpm}"
