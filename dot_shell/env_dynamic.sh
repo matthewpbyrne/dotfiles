@@ -60,12 +60,12 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
 	kitty_file=
 	kitty_integration=
 
-	if [ -n "${ZSH_VERSION:-}" ]; then
-		kitty_shell="zsh"
-		kitty_file="kitty.zsh"
-	elif [ -n "${BASH_VERSION:-}" ]; then
+	if [ -n "${BASH_VERSION:-}" ] && [ -n "${BASH:-}" ]; then
 		kitty_shell="bash"
 		kitty_file="kitty.bash"
+	elif [ -n "${ZSH_VERSION:-}" ] && [ "${ZSH_NAME:-}" = "zsh" ]; then
+		kitty_shell="zsh"
+		kitty_file="kitty.zsh"
 	fi
 
 	if [ -n "$kitty_shell" ] && [ -n "$kitty_file" ]; then
