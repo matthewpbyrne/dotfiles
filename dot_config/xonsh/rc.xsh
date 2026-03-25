@@ -3,7 +3,7 @@
 from pathlib import Path
 
 # Keep zsh as the default shell; use xonsh only when explicitly launched.
-$EDITOR = ${EDITOR or "nvim"}
+$EDITOR = @.env.get("EDITOR", "nvim")
 $XONSH_HISTORY_SIZE = (20000, "commands")
 $HISTCONTROL = "ignoredups"
 

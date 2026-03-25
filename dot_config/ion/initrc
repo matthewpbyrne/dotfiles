@@ -3,9 +3,9 @@
 
 # Keep this file for aliases/functions once Ion is installed on your system.
 # Start small and verify syntax against your installed Ion version.
-alias ll = "ls -alF"
-alias g = "git"
-alias v = "nvim"
+alias ll="ls -alF"
+alias g="git"
+alias v="nvim"
 
 fn mkcd dir
   mkdir -p $dir

@@ -5,7 +5,9 @@ if (not (has-env EDITOR)) {
   set-env EDITOR nvim
 }
 
-set-env PATH $E:HOME/.local/bin:$E:PATH
+if (not (has-value $paths $E:HOME/.local/bin)) {
+  set paths = [$E:HOME/.local/bin $@paths]
+}
 
 edit:abbr ll = 'ls -alF'
 edit:abbr g = git
