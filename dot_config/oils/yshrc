@@ -1,4 +1,4 @@
 # YSH trial config (chezmoi-managed)
 # Reuse OSH baseline for now to keep maintenance small.
 
-source --builtin ~/.config/oil/oshrc
+source ~/.config/oils/oshrc

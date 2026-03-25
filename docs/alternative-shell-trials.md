@@ -99,8 +99,8 @@ elvish
 - **Why try it**: useful if you want a path from bash-like syntax to stricter shell programming.
 - **How it differs from zsh**: closer to bash semantics (OSH) with newer language direction in YSH.
 - **Repo config**:
-  - `dot_config/oil/oshrc` -> `~/.config/oil/oshrc`
-  - `dot_config/oil/yshrc` -> `~/.config/oil/yshrc`
+  - `dot_config/oils/oshrc` -> `~/.config/oils/oshrc`
+  - `dot_config/oils/yshrc` -> `~/.config/oils/yshrc`
 
 Install examples:
 
