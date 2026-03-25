@@ -27,8 +27,9 @@ if command -v go > /dev/null 2>&1; then
   if [ -z "${GOBIN:-}" ]; then
     GOBIN="$(go env GOBIN 2> /dev/null)"
     if [ -z "$GOBIN" ]; then
-      GOPATH="$(go env GOPATH 2> /dev/null)"
-      [ -n "$GOPATH" ] && GOBIN="${GOPATH%%:*}/bin"
+      go_gopath="$(go env GOPATH 2> /dev/null)"
+      [ -n "$go_gopath" ] && GOBIN="${go_gopath%%:*}/bin"
+      unset go_gopath
     fi
   fi
 
@@ -106,15 +107,18 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
         kitty_sort_mode="gsort"
       elif sort -V < /dev/null > /dev/null 2>&1; then
         kitty_sort_mode="sort"
+      else
+        kitty_sort_mode="lex"
       fi
 
       for kitty_cellar in /opt/homebrew/Cellar/kitty /home/linuxbrew/.linuxbrew/Cellar/kitty; do
         [ -d "$kitty_cellar" ] || continue
-        [ -n "$kitty_sort_mode" ] || continue
         if [ "$kitty_sort_mode" = "gsort" ]; then
           kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | gsort -V | tail -n 1)"
-        else
+        elif [ "$kitty_sort_mode" = "sort" ]; then
           kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | sort -V | tail -n 1)"
+        else
+          kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | sort | tail -n 1)"
         fi
         [ -n "$kitty_version_dir" ] || continue
         kitty_candidate="${kitty_version_dir}/shell-integration/${kitty_shell}/${kitty_file}"
