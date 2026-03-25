@@ -93,8 +93,11 @@ if command -v fzf >/dev/null 2>&1; then
   fi
 
   # Only add a preview when one is not already set.
-  if [[ -n "${preview_cmd}" && "${FZF_DEFAULT_OPTS:-}" != *"--preview"* ]]; then
-    export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:+$FZF_DEFAULT_OPTS }--preview '${preview_cmd}'"
+  if [[ -n "${preview_cmd}" ]]; then
+    case " ${FZF_DEFAULT_OPTS:-} " in
+      *" --preview "*|*" --preview="*) ;;
+      *) export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:+$FZF_DEFAULT_OPTS }--preview '${preview_cmd}'" ;;
+    esac
   fi
 
   if fzf_zsh="$(fzf --zsh 2>/dev/null)"; then
@@ -110,6 +113,8 @@ if command -v fzf >/dev/null 2>&1; then
       [[ -f "$f" ]] && source "$f"
     done
   fi
+
+  unset preview_cmd
 fi
 
 # prompt
