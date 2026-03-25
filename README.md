@@ -15,3 +15,8 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin" \
 ```
 
 After that, chezmoi manages all configuration and bootstrap scripts.
+
+
+## Trying alternative shells (without replacing zsh)
+
+See [docs/alternative-shell-trials.md](docs/alternative-shell-trials.md) for trial-use configs and launch instructions for xonsh, Nushell, elvish, oil, and ion.

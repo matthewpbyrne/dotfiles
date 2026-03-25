@@ -1,0 +1,15 @@
+# Ion trial config (chezmoi-managed)
+# Ion is currently less active; keep this minimal and easy to remove.
+
+# Keep this file for aliases/functions once Ion is installed on your system.
+# Start small and verify syntax against your installed Ion version.
+alias ll = "ls -alF"
+alias g = "git"
+alias v = "nvim"
+
+fn mkcd dir
+  mkdir -p $dir
+  cd $dir
+end
+
+# Extend later: prompt and history tuning after validating your Ion build.
