@@ -56,22 +56,51 @@ esac
 
 # Kitty shell integration (if installed) improves cwd/shell state tracking.
 if [ "${TERM:-}" = "xterm-kitty" ]; then
-  kitty_integration="${KITTY_INSTALLATION_DIR:-}/shell-integration/bash/kitty.bash"
-  if [ -n "${KITTY_INSTALLATION_DIR:-}" ] && [ -r "$kitty_integration" ]; then
-    # shellcheck source=/dev/null
-    . "$kitty_integration"
-  elif [ -r /usr/lib/kitty/shell-integration/bash/kitty.bash ]; then
-    # shellcheck source=/dev/null
-    . /usr/lib/kitty/shell-integration/bash/kitty.bash
-  else
-    for kitty_integration in /opt/homebrew/Cellar/kitty/*/shell-integration/bash/kitty.bash; do
-      [ -r "$kitty_integration" ] || continue
-      # shellcheck source=/dev/null
-      . "$kitty_integration"
-      break
-    done
-  fi
-  unset kitty_integration
+	kitty_shell=
+	kitty_file=
+	kitty_integration=
+
+	if [ -n "${ZSH_VERSION:-}" ]; then
+		kitty_shell="zsh"
+		kitty_file="kitty.zsh"
+	elif [ -n "${BASH_VERSION:-}" ]; then
+		kitty_shell="bash"
+		kitty_file="kitty.bash"
+	fi
+
+	if [ -n "$kitty_shell" ] && [ -n "$kitty_file" ]; then
+		if [ -n "${KITTY_INSTALLATION_DIR:-}" ]; then
+			candidate="${KITTY_INSTALLATION_DIR}/shell-integration/${kitty_shell}/${kitty_file}"
+			if [ -r "$candidate" ]; then
+				kitty_integration="$candidate"
+			fi
+		fi
+
+		if [ -z "$kitty_integration" ]; then
+			candidate="/usr/lib/kitty/shell-integration/${kitty_shell}/${kitty_file}"
+			if [ -r "$candidate" ]; then
+				kitty_integration="$candidate"
+			fi
+		fi
+
+		if [ -z "$kitty_integration" ]; then
+			for candidate in /opt/homebrew/Cellar/kitty/*/shell-integration/"${kitty_shell}"/"${kitty_file}"; do
+				[ -r "$candidate" ] || continue
+				kitty_integration="$candidate"
+				break
+			done
+		fi
+
+		if [ -n "$kitty_integration" ] && [ -r "$kitty_integration" ]; then
+			# shellcheck source=/dev/null
+			. "$kitty_integration"
+		fi
+	fi
+
+	unset candidate
+	unset kitty_shell
+	unset kitty_file
+	unset kitty_integration
 fi
 
 # Keep tmux global PATH in sync so plugins launched in tmux popups
