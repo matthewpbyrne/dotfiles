@@ -77,8 +77,20 @@ if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
 fi
 
+# zoxide (directory jumping without overriding cd)
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh --cmd z)"
+fi
+
 # fzf integration
 if command -v fzf >/dev/null 2>&1; then
+  # Prefer bat for previews when available.
+  if command -v bat >/dev/null 2>&1; then
+    export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:-} --preview 'bat --style=numbers --color=always --line-range=:200 {}'"
+  elif command -v batcat >/dev/null 2>&1; then
+    export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:-} --preview 'batcat --style=numbers --color=always --line-range=:200 {}'"
+  fi
+
   if fzf_zsh="$(fzf --zsh 2>/dev/null)"; then
     eval "$fzf_zsh"
     unset fzf_zsh
