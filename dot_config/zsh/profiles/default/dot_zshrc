@@ -84,23 +84,36 @@ fi
 
 # fzf integration
 if command -v fzf >/dev/null 2>&1; then
-  # Prefer bat for previews when available.
-  preview_cmd=""
+  # Prefer bat for file previews when available.
+  file_preview_cmd=""
   if command -v bat >/dev/null 2>&1; then
-    preview_cmd="bat --style=numbers --color=always --line-range=:200 -- {}"
+    file_preview_cmd="bat --style=numbers --color=always --line-range=:200 -- {}"
   elif command -v batcat >/dev/null 2>&1; then
-    preview_cmd="batcat --style=numbers --color=always --line-range=:200 -- {}"
+    file_preview_cmd="batcat --style=numbers --color=always --line-range=:200 -- {}"
+  else
+    file_preview_cmd="cat {}"
   fi
 
-  # Only add previews when one is not already set for file/directory pickers.
-  if [[ -n "${preview_cmd}" ]]; then
+  # Prefer eza for directory previews when available.
+  dir_preview_cmd=""
+  if command -v eza >/dev/null 2>&1; then
+    dir_preview_cmd="eza --long --all {}"
+  else
+    dir_preview_cmd="ls -la {}"
+  fi
+
+  # Only add previews when one is not already set for the picker.
+  if [[ -n "${file_preview_cmd}" ]]; then
     case " ${FZF_CTRL_T_OPTS:-} " in
       *" --preview "*|*" --preview="*) ;;
-      *) export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS:+$FZF_CTRL_T_OPTS }--preview '${preview_cmd}'" ;;
+      *) export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS:+$FZF_CTRL_T_OPTS }--preview '${file_preview_cmd}'" ;;
     esac
+  fi
+
+  if [[ -n "${dir_preview_cmd}" ]]; then
     case " ${FZF_ALT_C_OPTS:-} " in
       *" --preview "*|*" --preview="*) ;;
-      *) export FZF_ALT_C_OPTS="${FZF_ALT_C_OPTS:+$FZF_ALT_C_OPTS }--preview '${preview_cmd}'" ;;
+      *) export FZF_ALT_C_OPTS="${FZF_ALT_C_OPTS:+$FZF_ALT_C_OPTS }--preview '${dir_preview_cmd}'" ;;
     esac
   fi
 
@@ -118,7 +131,8 @@ if command -v fzf >/dev/null 2>&1; then
     done
   fi
 
-  unset preview_cmd
+  unset file_preview_cmd
+  unset dir_preview_cmd
 fi
 
 # prompt
