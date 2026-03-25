@@ -92,11 +92,15 @@ if command -v fzf >/dev/null 2>&1; then
     preview_cmd="batcat --style=numbers --color=always --line-range=:200 -- {}"
   fi
 
-  # Only add a preview when one is not already set.
+  # Only add previews when one is not already set for file/directory pickers.
   if [[ -n "${preview_cmd}" ]]; then
-    case " ${FZF_DEFAULT_OPTS:-} " in
+    case " ${FZF_CTRL_T_OPTS:-} " in
       *" --preview "*|*" --preview="*) ;;
-      *) export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:+$FZF_DEFAULT_OPTS }--preview '${preview_cmd}'" ;;
+      *) export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS:+$FZF_CTRL_T_OPTS }--preview '${preview_cmd}'" ;;
+    esac
+    case " ${FZF_ALT_C_OPTS:-} " in
+      *" --preview "*|*" --preview="*) ;;
+      *) export FZF_ALT_C_OPTS="${FZF_ALT_C_OPTS:+$FZF_ALT_C_OPTS }--preview '${preview_cmd}'" ;;
     esac
   fi
 
