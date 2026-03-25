@@ -84,15 +84,20 @@ ff() {
 	command -v fzf >/dev/null 2>&1 || return 1
 
 	if command -v fd >/dev/null 2>&1; then
-		selected_file="$(fd --type f --hidden --follow --exclude .git | fzf --preview "$(_fzf_preview_cmd)")"
+		_ff_selected_file="$(fd --type f --hidden --follow --exclude .git | fzf --preview "$(_fzf_preview_cmd)")"
 	else
-		selected_file="$(find . \
+		_ff_selected_file="$(find . \
 			-type d \( -name .git -o -name .direnv -o -name node_modules \) -prune -o \
 			-type f -print 2>/dev/null | fzf --preview "$(_fzf_preview_cmd)")"
 	fi
 
-	[ -n "$selected_file" ] || return 0
-	"${EDITOR:-vi}" "$selected_file"
+	if [ -z "$_ff_selected_file" ]; then
+		unset _ff_selected_file
+		return 0
+	fi
+
+	"${EDITOR:-vi}" "$_ff_selected_file"
+	unset _ff_selected_file
 }
 
 # Fuzzy-search shell history and print the chosen command.
@@ -100,13 +105,18 @@ fh() {
 	command -v fzf >/dev/null 2>&1 || return 1
 
 	if [ -n "${ZSH_VERSION:-}" ]; then
-		selected_history="$(fc -rl 1 | sed 's/^[[:space:]]*[0-9][0-9]*[[:space:]]*//' | fzf --tac)"
+		_fh_selected_history="$(fc -rl 1 | sed 's/^[[:space:]]*[0-9][0-9]*[[:space:]]*//' | fzf --tac)"
 	else
-		selected_history="$(history | sed 's/^[[:space:]]*[0-9][0-9]*[[:space:]]*//' | fzf --tac)"
+		_fh_selected_history="$(history | sed 's/^[[:space:]]*[0-9][0-9]*[[:space:]]*//' | fzf --tac)"
 	fi
 
-	[ -n "$selected_history" ] || return 0
-	printf '%s\n' "$selected_history"
+	if [ -z "$_fh_selected_history" ]; then
+		unset _fh_selected_history
+		return 0
+	fi
+
+	printf '%s\n' "$_fh_selected_history"
+	unset _fh_selected_history
 }
 
 # Fuzzy-select a git branch and switch to it.
@@ -115,16 +125,20 @@ fbr() {
 	command -v fzf >/dev/null 2>&1 || return 1
 
 	git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 1
-	selected_branch="$(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes \
+	_fbr_selected_branch="$(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes \
 		| grep -v '/HEAD$' \
 		| awk '!seen[$0]++' \
 		| fzf)"
-	[ -n "$selected_branch" ] || return 0
-	if git show-ref --verify --quiet "refs/heads/$selected_branch"; then
-		git switch "$selected_branch"
-	else
-		git switch --track "$selected_branch"
+	if [ -z "$_fbr_selected_branch" ]; then
+		unset _fbr_selected_branch
+		return 0
 	fi
+	if git show-ref --verify --quiet "refs/heads/$_fbr_selected_branch"; then
+		git switch "$_fbr_selected_branch"
+	else
+		git switch --track "$_fbr_selected_branch"
+	fi
+	unset _fbr_selected_branch
 }
 
 # Fuzzy-select and attach/switch to an existing tmux session.
@@ -132,14 +146,19 @@ tss() {
 	command -v tmux >/dev/null 2>&1 || return 1
 	command -v fzf >/dev/null 2>&1 || return 1
 
-	selected_session="$(tmux list-sessions -F '#S' 2>/dev/null | fzf)"
-	[ -n "$selected_session" ] || return 0
+	_tss_selected_session="$(tmux list-sessions -F '#S' 2>/dev/null | fzf)"
+	if [ -z "$_tss_selected_session" ]; then
+		unset _tss_selected_session
+		return 0
+	fi
 
 	if [ -n "${TMUX:-}" ]; then
-		tmux switch-client -t "$selected_session"
+		tmux switch-client -t "$_tss_selected_session"
 	else
-		tmux attach-session -t "$selected_session"
+		tmux attach-session -t "$_tss_selected_session"
 	fi
+
+	unset _tss_selected_session
 }
 
 # Jump to a frequently used project directory via zoxide.
@@ -153,7 +172,14 @@ zjump() {
 	command -v zoxide >/dev/null 2>&1 || return 1
 	command -v fzf >/dev/null 2>&1 || return 1
 
-	selected_dir="$(zoxide query -l | fzf)"
-	[ -n "$selected_dir" ] || return 0
-	cd "$selected_dir" || return 1
+	_zjump_selected_dir="$(zoxide query -l | fzf)"
+	if [ -z "$_zjump_selected_dir" ]; then
+		unset _zjump_selected_dir
+		return 0
+	fi
+	cd "$_zjump_selected_dir" || {
+		unset _zjump_selected_dir
+		return 1
+	}
+	unset _zjump_selected_dir
 }
