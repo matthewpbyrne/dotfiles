@@ -1,8 +1,5 @@
 # shellcheck shell=sh
 
-# Tool-managed base dirs
-export MISE_DATA_DIR="${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}"
-
 # Preferred editor (PATH-dependent)
 if command -v nvim >/dev/null 2>&1; then
 	EDITOR="$(command -v nvim)"
