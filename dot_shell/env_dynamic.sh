@@ -84,11 +84,12 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
 		fi
 
 		if [ -z "$kitty_integration" ]; then
-			for candidate in /opt/homebrew/Cellar/kitty/*/shell-integration/"${kitty_shell}"/"${kitty_file}"; do
-				[ -r "$candidate" ] || continue
-				kitty_integration="$candidate"
-				break
-			done
+			if [ -d /opt/homebrew/Cellar/kitty ]; then
+				candidate="$(find /opt/homebrew/Cellar/kitty -type f -path "*/shell-integration/${kitty_shell}/${kitty_file}" 2>/dev/null | sort | head -n 1)"
+				if [ -n "$candidate" ] && [ -r "$candidate" ]; then
+					kitty_integration="$candidate"
+				fi
+			fi
 		fi
 
 		if [ -n "$kitty_integration" ] && [ -r "$kitty_integration" ]; then
