@@ -4,14 +4,16 @@
 export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
 
 # Preferred editor (PATH-dependent)
-if command -v nvim > /dev/null 2>&1; then
-  EDITOR="$(command -v nvim)"
-elif command -v vim > /dev/null 2>&1; then
-  EDITOR="$(command -v vim)"
-elif command -v vi > /dev/null 2>&1; then
-  EDITOR="$(command -v vi)"
-else
-  EDITOR="vi"
+if [ -z "${EDITOR:-}" ]; then
+  if command -v nvim > /dev/null 2>&1; then
+    EDITOR="$(command -v nvim)"
+  elif command -v vim > /dev/null 2>&1; then
+    EDITOR="$(command -v vim)"
+  elif command -v vi > /dev/null 2>&1; then
+    EDITOR="$(command -v vi)"
+  else
+    EDITOR="vi"
+  fi
 fi
 export EDITOR
 
@@ -22,15 +24,19 @@ export VISUAL
 
 # Go-derived environment
 if command -v go > /dev/null 2>&1; then
-  GOBIN="$(go env GOBIN 2> /dev/null)"
-  if [ -z "$GOBIN" ]; then
-    GOPATH="$(go env GOPATH 2> /dev/null)"
-    [ -n "$GOPATH" ] && GOBIN="${GOPATH%%:*}/bin"
+  if [ -z "${GOBIN:-}" ]; then
+    GOBIN="$(go env GOBIN 2> /dev/null)"
+    if [ -z "$GOBIN" ]; then
+      GOPATH="$(go env GOPATH 2> /dev/null)"
+      [ -n "$GOPATH" ] && GOBIN="${GOPATH%%:*}/bin"
+    fi
   fi
 
   if [ -n "${GOBIN:-}" ]; then
     export GOBIN
-    add_tool_path "$GOBIN"
+    if command -v add_tool_path > /dev/null 2>&1; then
+      add_tool_path "$GOBIN"
+    fi
   fi
 fi
 
@@ -95,12 +101,20 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
     fi
 
     if [ -z "$kitty_integration" ]; then
+      kitty_sort_mode=
+      if command -v gsort > /dev/null 2>&1 && gsort -V < /dev/null > /dev/null 2>&1; then
+        kitty_sort_mode="gsort"
+      elif sort -V < /dev/null > /dev/null 2>&1; then
+        kitty_sort_mode="sort"
+      fi
+
       for kitty_cellar in /opt/homebrew/Cellar/kitty /home/linuxbrew/.linuxbrew/Cellar/kitty; do
         [ -d "$kitty_cellar" ] || continue
-        if sort -V < /dev/null > /dev/null 2>&1; then
-          kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | sort -V | tail -n 1)"
+        [ -n "$kitty_sort_mode" ] || continue
+        if [ "$kitty_sort_mode" = "gsort" ]; then
+          kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | gsort -V | tail -n 1)"
         else
-          kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | sort | tail -n 1)"
+          kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | sort -V | tail -n 1)"
         fi
         [ -n "$kitty_version_dir" ] || continue
         kitty_candidate="${kitty_version_dir}/shell-integration/${kitty_shell}/${kitty_file}"
@@ -121,6 +135,7 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
   unset kitty_prefix
   unset kitty_cellar
   unset kitty_version_dir
+  unset kitty_sort_mode
   unset kitty_shell
   unset kitty_file
   unset kitty_integration
