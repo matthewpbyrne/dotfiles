@@ -58,6 +58,7 @@ esac
 if [ "${TERM:-}" = "xterm-kitty" ]; then
 	kitty_shell=
 	kitty_file=
+	kitty_candidate=
 	kitty_integration=
 
 	if [ -n "${BASH_VERSION:-}" ] && [ -n "${BASH:-}" ]; then
@@ -70,24 +71,24 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
 
 	if [ -n "$kitty_shell" ] && [ -n "$kitty_file" ]; then
 		if [ -n "${KITTY_INSTALLATION_DIR:-}" ]; then
-			candidate="${KITTY_INSTALLATION_DIR}/shell-integration/${kitty_shell}/${kitty_file}"
-			if [ -r "$candidate" ]; then
-				kitty_integration="$candidate"
+			kitty_candidate="${KITTY_INSTALLATION_DIR}/shell-integration/${kitty_shell}/${kitty_file}"
+			if [ -r "$kitty_candidate" ]; then
+				kitty_integration="$kitty_candidate"
 			fi
 		fi
 
 		if [ -z "$kitty_integration" ]; then
-			candidate="/usr/lib/kitty/shell-integration/${kitty_shell}/${kitty_file}"
-			if [ -r "$candidate" ]; then
-				kitty_integration="$candidate"
+			kitty_candidate="/usr/lib/kitty/shell-integration/${kitty_shell}/${kitty_file}"
+			if [ -r "$kitty_candidate" ]; then
+				kitty_integration="$kitty_candidate"
 			fi
 		fi
 
 		if [ -z "$kitty_integration" ]; then
 			if [ -d /opt/homebrew/Cellar/kitty ]; then
-				candidate="$(find /opt/homebrew/Cellar/kitty -type f -path "*/shell-integration/${kitty_shell}/${kitty_file}" 2>/dev/null | sort | head -n 1)"
-				if [ -n "$candidate" ] && [ -r "$candidate" ]; then
-					kitty_integration="$candidate"
+				kitty_candidate="$(find /opt/homebrew/Cellar/kitty -type f -path "*/shell-integration/${kitty_shell}/${kitty_file}" 2>/dev/null | sort | head -n 1)"
+				if [ -n "$kitty_candidate" ] && [ -r "$kitty_candidate" ]; then
+					kitty_integration="$kitty_candidate"
 				fi
 			fi
 		fi
@@ -98,7 +99,7 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
 		fi
 	fi
 
-	unset candidate
+	unset kitty_candidate
 	unset kitty_shell
 	unset kitty_file
 	unset kitty_integration
