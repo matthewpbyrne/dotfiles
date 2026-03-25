@@ -71,11 +71,11 @@ dcupd() {
 
 _fzf_preview_cmd() {
 	if command -v bat >/dev/null 2>&1; then
-		printf '%s' 'bat --style=numbers --color=always --line-range=:200 {}'
+		printf '%s' 'bat --style=numbers --color=always --line-range=:200 -- {}'
 	elif command -v batcat >/dev/null 2>&1; then
-		printf '%s' 'batcat --style=numbers --color=always --line-range=:200 {}'
+		printf '%s' 'batcat --style=numbers --color=always --line-range=:200 -- {}'
 	else
-		printf '%s' 'sed -n "1,200p" {}'
+		printf '%s' 'sed -n "1,200p" -- {}'
 	fi
 }
 
@@ -86,7 +86,9 @@ ff() {
 	if command -v fd >/dev/null 2>&1; then
 		selected_file="$(fd --type f --hidden --follow --exclude .git | fzf --preview "$(_fzf_preview_cmd)")"
 	else
-		selected_file="$(find . -type f 2>/dev/null | fzf --preview "$(_fzf_preview_cmd)")"
+		selected_file="$(find . \
+			-type d \( -name .git -o -name .direnv -o -name node_modules \) -prune -o \
+			-type f -print 2>/dev/null | fzf --preview "$(_fzf_preview_cmd)")"
 	fi
 
 	[ -n "$selected_file" ] || return 0
@@ -113,9 +115,16 @@ fbr() {
 	command -v fzf >/dev/null 2>&1 || return 1
 
 	git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 1
-	selected_branch="$(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes | sed 's#^origin/##' | awk '!seen[$0]++' | fzf)"
+	selected_branch="$(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes \
+		| grep -v '/HEAD$' \
+		| awk '!seen[$0]++' \
+		| fzf)"
 	[ -n "$selected_branch" ] || return 0
-	git switch "$selected_branch"
+	if git show-ref --verify --quiet "refs/heads/$selected_branch"; then
+		git switch "$selected_branch"
+	else
+		git switch --track "$selected_branch"
+	fi
 }
 
 # Fuzzy-select and attach/switch to an existing tmux session.

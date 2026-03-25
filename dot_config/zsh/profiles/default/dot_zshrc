@@ -85,10 +85,16 @@ fi
 # fzf integration
 if command -v fzf >/dev/null 2>&1; then
   # Prefer bat for previews when available.
+  preview_cmd=""
   if command -v bat >/dev/null 2>&1; then
-    export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:-} --preview 'bat --style=numbers --color=always --line-range=:200 {}'"
+    preview_cmd="bat --style=numbers --color=always --line-range=:200 -- {}"
   elif command -v batcat >/dev/null 2>&1; then
-    export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:-} --preview 'batcat --style=numbers --color=always --line-range=:200 {}'"
+    preview_cmd="batcat --style=numbers --color=always --line-range=:200 -- {}"
+  fi
+
+  # Only add a preview when one is not already set.
+  if [[ -n "${preview_cmd}" && "${FZF_DEFAULT_OPTS:-}" != *"--preview"* ]]; then
+    export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:+$FZF_DEFAULT_OPTS }--preview '${preview_cmd}'"
   fi
 
   if fzf_zsh="$(fzf --zsh 2>/dev/null)"; then
