@@ -39,6 +39,41 @@ if command -v luarocks >/dev/null 2>&1; then
 	eval "$(luarocks path --shell=sh 2>/dev/null)"
 fi
 
+# Terminal capability hints
+case "${TERM_PROGRAM:-}" in
+  ghostty|iTerm.app|WezTerm|Apple_Terminal)
+    : "${COLORTERM:=truecolor}"
+    export COLORTERM
+    ;;
+esac
+
+case "${TERM:-}" in
+  alacritty|ghostty|xterm-kitty)
+    : "${COLORTERM:=truecolor}"
+    export COLORTERM
+    ;;
+esac
+
+# Kitty shell integration (if installed) improves cwd/shell state tracking.
+if [ "${TERM:-}" = "xterm-kitty" ]; then
+  kitty_integration="${KITTY_INSTALLATION_DIR:-}/shell-integration/bash/kitty.bash"
+  if [ -n "${KITTY_INSTALLATION_DIR:-}" ] && [ -r "$kitty_integration" ]; then
+    # shellcheck source=/dev/null
+    . "$kitty_integration"
+  elif [ -r /usr/lib/kitty/shell-integration/bash/kitty.bash ]; then
+    # shellcheck source=/dev/null
+    . /usr/lib/kitty/shell-integration/bash/kitty.bash
+  else
+    for kitty_integration in /opt/homebrew/Cellar/kitty/*/shell-integration/bash/kitty.bash; do
+      [ -r "$kitty_integration" ] || continue
+      # shellcheck source=/dev/null
+      . "$kitty_integration"
+      break
+    done
+  fi
+  unset kitty_integration
+fi
+
 # Keep tmux global PATH in sync so plugins launched in tmux popups
 # can find tools installed by asdf, Homebrew, etc.
 if [ -n "${TMUX:-}" ]; then
