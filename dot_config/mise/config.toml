@@ -1,0 +1,8 @@
+# Managed by chezmoi
+#
+# Global mise configuration.
+# Keep user-level defaults here instead of relying on asdf-style globals.
+
+[settings]
+# Continue honoring .tool-versions during migration from asdf.
+legacy_version_file = true

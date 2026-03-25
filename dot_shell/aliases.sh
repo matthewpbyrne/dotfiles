@@ -22,8 +22,8 @@ alias opl='omz plugin list'
 alias plantuml='java -jar ~/.local/lib/plantuml.jar'
 
 # Ruby tool version pinning
-alias ripper-tags='ASDF_RUBY_VERSION=3.0.2 ripper-tags'
-alias starscope='ASDF_RUBY_VERSION=3.1.1 starscope'
+alias ripper-tags='MISE_RUBY_VERSION=3.0.2 ripper-tags'
+alias starscope='MISE_RUBY_VERSION=3.1.1 starscope'
 
 # Editors
 alias e='$EDITOR'

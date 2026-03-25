@@ -22,6 +22,9 @@ esac
 # direnv
 command -v direnv >/dev/null 2>&1 && eval "$(direnv hook bash)"
 
+# mise
+command -v mise >/dev/null 2>&1 && eval "$(mise activate bash)"
+
 # History tweaks
 HISTCONTROL=ignoreboth
 HISTSIZE=5000

@@ -1,7 +1,7 @@
 # shellcheck shell=sh
 
 # Tool-managed base dirs
-export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
+export MISE_DATA_DIR="${MISE_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/mise}"
 
 # Preferred editor (PATH-dependent)
 if command -v nvim >/dev/null 2>&1; then
@@ -40,7 +40,7 @@ if command -v luarocks >/dev/null 2>&1; then
 fi
 
 # Keep tmux global PATH in sync so plugins launched in tmux popups
-# can find tools installed by asdf, Homebrew, etc.
+# can find tools installed by mise, Homebrew, etc.
 if [ -n "${TMUX:-}" ]; then
 	tmux set-environment -g PATH "$PATH" 2>/dev/null || true
 fi

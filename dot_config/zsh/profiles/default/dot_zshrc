@@ -77,6 +77,11 @@ if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
 fi
 
+# mise
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh)"
+fi
+
 # fzf integration
 if command -v fzf >/dev/null 2>&1; then
   if fzf_zsh="$(fzf --zsh 2>/dev/null)"; then
