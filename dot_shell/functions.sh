@@ -75,7 +75,7 @@ _fzf_preview_cmd() {
 	elif command -v batcat >/dev/null 2>&1; then
 		printf '%s' 'batcat --style=numbers --color=always --line-range=:200 -- {}'
 	else
-		printf '%s' 'sed -n "1,200p" -- {}'
+		printf '%s' 'sh -c '"'"'sed -n "1,200p" < "$1"'"'"' sh {}'
 	fi
 }
 
@@ -84,7 +84,7 @@ ff() {
 	command -v fzf >/dev/null 2>&1 || return 1
 
 	if command -v fd >/dev/null 2>&1; then
-		_ff_selected_file="$(fd --type f --hidden --follow --exclude .git | fzf --preview "$(_fzf_preview_cmd)")"
+		_ff_selected_file="$(fd --type f --hidden --exclude .git --exclude .direnv --exclude node_modules | fzf --preview "$(_fzf_preview_cmd)")"
 	else
 		_ff_selected_file="$(find . \
 			-type d \( -name .git -o -name .direnv -o -name node_modules \) -prune -o \
