@@ -1,0 +1,16 @@
+# Managed by chezmoi
+# Shared baseline terminal settings; keep per-terminal overrides minimal.
+
+command = /bin/zsh --login
+font-family = monospace
+font-size = 12
+window-padding-x = 2
+window-padding-y = 2
+background-opacity = 0.9
+
+# Ghostty-native shell integration improves cwd tracking and prompt markers.
+shell-integration = detect
+
+# Theme defaults + optional local override file.
+theme = tokyonight-storm
+config-file = ?themes/current
