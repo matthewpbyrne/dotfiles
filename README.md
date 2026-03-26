@@ -55,7 +55,6 @@ From shared shell functions:
 
 - `ff` — fuzzy-find file and open in `$EDITOR`
 - `fh` — fuzzy-search command history and print selected command
-- `fbr` — fuzzy git branch switch (`git switch`)
 - `tss` — fuzzy tmux session switch/attach
 - `zproj` — jump to project-y directories using zoxide ranking (`z code`)
 - `zjump` — fuzzy pick from `zoxide query -l` and `cd` there
