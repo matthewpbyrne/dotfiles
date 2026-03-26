@@ -33,6 +33,7 @@ help:
 	  'make fmt          # format everything safely' \
 	  'make lint         # lint/check everything' \
 	  'make check        # alias for lint' \
+	  'make lint-terminal # check shared terminal defaults stay aligned' \
 	  'make fmt-sh       # format .sh files' \
 	  'make fmt-zsh      # format .zsh files' \
 	  'make lint-sh      # shellcheck + syntax check .sh' \
@@ -44,7 +45,7 @@ help:
 
 .PHONY: fmt lint check
 fmt: fmt-sh fmt-zsh fmt-md fmt-toml
-lint: lint-sh lint-zsh lint-md lint-toml
+lint: lint-sh lint-zsh lint-md lint-toml lint-terminal
 check: lint
 
 # ----------------
@@ -74,7 +75,15 @@ lint-sh:
 	fi
 	@if [ -z "$(SH_POSIX_FILES)$(SH_BASH_FILES)" ]; then \
 	  echo "No shell files"; \
-	fi
+		fi
+
+# ----------------
+# Terminal config consistency
+# ----------------
+
+.PHONY: lint-terminal
+lint-terminal:
+	@scripts/check_terminal_defaults.sh
 
 # ----------------
 # Zsh (.zsh, zsh dotfiles)

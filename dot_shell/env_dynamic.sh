@@ -67,7 +67,7 @@ esac
 
 if [ -z "$colorterm_hint" ]; then
   case "${TERM:-}" in
-    ghostty | xterm-kitty)
+    ghostty | xterm-ghostty | xterm-kitty)
       colorterm_hint=1
       ;;
   esac
@@ -95,58 +95,14 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
   fi
 
   if [ -n "$kitty_shell" ] && [ -n "$kitty_file" ]; then
-    if [ -n "${KITTY_INSTALLATION_DIR:-}" ]; then
-      kitty_candidate="${KITTY_INSTALLATION_DIR}/shell-integration/${kitty_shell}/${kitty_file}"
+    for kitty_base in "${KITTY_INSTALLATION_DIR:-}" /usr/lib/kitty; do
+      [ -n "$kitty_base" ] || continue
+      kitty_candidate="${kitty_base}/shell-integration/${kitty_shell}/${kitty_file}"
       if [ -r "$kitty_candidate" ]; then
         kitty_integration="$kitty_candidate"
+        break
       fi
-    fi
-
-    if [ -z "$kitty_integration" ]; then
-      kitty_candidate="/usr/lib/kitty/shell-integration/${kitty_shell}/${kitty_file}"
-      if [ -r "$kitty_candidate" ]; then
-        kitty_integration="$kitty_candidate"
-      fi
-    fi
-
-    if [ -z "$kitty_integration" ]; then
-      for kitty_prefix in /opt/homebrew/opt/kitty /home/linuxbrew/.linuxbrew/opt/kitty; do
-        kitty_candidate="${kitty_prefix}/shell-integration/${kitty_shell}/${kitty_file}"
-        if [ -r "$kitty_candidate" ]; then
-          kitty_integration="$kitty_candidate"
-          break
-        fi
-      done
-    fi
-
-    if [ -z "$kitty_integration" ]; then
-      kitty_sort_mode=
-      if command -v gsort > /dev/null 2>&1 && gsort -V < /dev/null > /dev/null 2>&1; then
-        kitty_sort_mode="gsort"
-      elif sort -V < /dev/null > /dev/null 2>&1; then
-        kitty_sort_mode="sort"
-      else
-        kitty_sort_mode="lex"
-      fi
-
-      for kitty_cellar in /opt/homebrew/Cellar/kitty /home/linuxbrew/.linuxbrew/Cellar/kitty; do
-        [ -d "$kitty_cellar" ] || continue
-        if [ "$kitty_sort_mode" = "gsort" ]; then
-          kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | gsort -V | tail -n 1)"
-        elif [ "$kitty_sort_mode" = "sort" ]; then
-          kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | sort -V | tail -n 1)"
-        else
-          # Last-resort fallback when version-aware sort is unavailable.
-          kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | sort | tail -n 1)"
-        fi
-        [ -n "$kitty_version_dir" ] || continue
-        kitty_candidate="${kitty_version_dir}/shell-integration/${kitty_shell}/${kitty_file}"
-        if [ -r "$kitty_candidate" ]; then
-          kitty_integration="$kitty_candidate"
-          break
-        fi
-      done
-    fi
+    done
 
     if [ -n "$kitty_integration" ] && [ -r "$kitty_integration" ]; then
       # shellcheck source=/dev/null
@@ -155,10 +111,7 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
   fi
 
   unset kitty_candidate
-  unset kitty_prefix
-  unset kitty_cellar
-  unset kitty_version_dir
-  unset kitty_sort_mode
+  unset kitty_base
   unset kitty_shell
   unset kitty_file
   unset kitty_integration
