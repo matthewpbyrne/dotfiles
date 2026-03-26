@@ -20,6 +20,37 @@ Goals for any change:
 - avoid committing secrets or machine-specific private values
 - prefer small, reviewable changes
 
+## Supported environments and portability policy
+
+This repo targets the author's real machines and modern bootstrap-managed developer environments.
+
+Primary supported environments:
+
+- recent macOS
+- recent Arch / Manjaro
+- recent Ubuntu LTS
+- other environments only when explicitly stated in the task
+
+Do not optimise for unspecified legacy systems, minimal containers, or unknown distributions unless explicitly asked.
+
+Prefer readability and predictable startup over speculative compatibility code.
+
+If a dependency is intentional (for example a terminfo entry, Homebrew-installed tool, tmux capability, or shell integration), prefer one of:
+
+1. documenting the requirement
+1. ensuring bootstrap installs it
+1. adding a clear guard with a simple failure mode
+
+Do **not** add complex runtime fallback logic for hypothetical unsupported environments unless the issue is reproducible in a supported environment.
+
+When raising a compatibility concern, classify it as one of:
+
+- confirmed issue in a supported environment
+- likely issue in a supported environment
+- hypothetical issue outside supported scope
+
+Only treat the first category as a default blocker.
+
 ## Important repository conventions
 
 This is a chezmoi repo, so tracked files are usually source-state names such as:
@@ -57,6 +88,18 @@ Responsibilities are split as follows:
 Do not reintroduce legacy monolithic shell setup.
 
 Do not duplicate the same logic across `dot_profile`, `dot_bashrc`, and zsh profile files unless required by shell startup semantics.
+
+## Shell and dotfile change policy
+
+For shell, tmux, and dotfile changes:
+
+- prefer minimal, readable conditionals
+- avoid defensive branching for every possible environment
+- prefer `command -v` guards for optional tools
+- prefer bootstrap or documentation over runtime probes when the tool is an intended dependency
+- do not add fallback code that materially reduces readability unless there is a confirmed need
+
+Shell startup should be robust when optional commands are missing, but should not be cluttered by speculative compatibility workarounds for unsupported setups.
 
 ## Secrets and private data
 
@@ -105,6 +148,8 @@ Avoid duplicate or conflicting tmux settings.
 
 Preserve environment propagation behaviour where relevant.
 
+Prefer explicit modern defaults over compatibility fallbacks unless a supported target requires them.
+
 ## Formatting and linting
 
 Because this is a chezmoi source-state repo, run formatting and linting against the repo files here, not the applied files in `$HOME`.
@@ -140,9 +185,9 @@ Typical workflow:
 When making changes:
 
 - prefer minimal diffs
-- preserve existing working behaviour unless intentionally refactoring
+- preserve existing working behaviour on supported environments unless intentionally refactoring; do not trade clarity for speculative portability
 - explain any startup-order changes clearly
-- keep shell startup robust when commands are missing
+- keep shell startup robust when optional commands are missing, using simple guards such as `command -v ... >/dev/null 2>&1`; do not introduce multi-branch compatibility code unless required by a supported environment
 - guard optional tooling with checks such as `command -v ... >/dev/null 2>&1`
 
 ## Commit conventions
@@ -187,3 +232,22 @@ Prefer:
 1. minimal patch
 1. validation steps
 1. suggested commit message
+
+## Review scope and evidence standard
+
+When reviewing a change:
+
+- focus first on issues introduced by the current diff
+- do not reopen unrelated pre-existing issues unless the current change makes them worse
+- distinguish clearly between blockers, non-blocking suggestions, and out-of-scope concerns
+- prefer concrete, reproducible issues over speculative warnings
+
+For any reported issue, include:
+
+1. what file or line is affected
+1. what the concrete failure mode is
+1. which supported environment it affects
+1. whether the issue is observed or hypothetical
+1. the smallest reasonable fix
+
+Avoid broad comments such as "this may break on older systems" unless the review also states which supported target is affected and why.
