@@ -1,0 +1,23 @@
+# Oil/OSH trial config (chezmoi-managed)
+# Keep zsh as your default shell; this file is only for explicit osh/ysh sessions.
+
+[[ $- != *i* ]] && return
+
+export EDITOR=${EDITOR:-nvim}
+HISTSIZE=${HISTSIZE:-20000}
+
+case ":$PATH:" in
+  *":$HOME/.local/bin:"*) ;;
+  *) PATH="$HOME/.local/bin:$PATH" ;;
+esac
+export PATH
+
+alias ll='ls -alF'
+alias g='git'
+alias v='nvim'
+
+mkcd() {
+  mkdir -p "$1" && cd "$1"
+}
+
+# Extend later: stricter Oil options, prompt tweaks, and completion helpers.
