@@ -27,7 +27,10 @@ if command -v go > /dev/null 2>&1; then
   if [ -z "${GOBIN:-}" ]; then
     GOBIN="$(go env GOBIN 2> /dev/null)"
     if [ -z "$GOBIN" ]; then
-      go_gopath="$(go env GOPATH 2> /dev/null)"
+      go_gopath="${GOPATH:-}"
+      if [ -z "$go_gopath" ]; then
+        go_gopath="$(go env GOPATH 2> /dev/null)"
+      fi
       [ -n "$go_gopath" ] && GOBIN="${go_gopath%%:*}/bin"
       unset go_gopath
     fi
@@ -129,6 +132,7 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
         elif [ "$kitty_sort_mode" = "sort" ]; then
           kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | sort -V | tail -n 1)"
         else
+          # Last-resort fallback when version-aware sort is unavailable.
           kitty_version_dir="$(find "$kitty_cellar" -mindepth 1 -maxdepth 1 -type d 2> /dev/null | sort | tail -n 1)"
         fi
         [ -n "$kitty_version_dir" ] || continue
