@@ -95,29 +95,14 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
   fi
 
   if [ -n "$kitty_shell" ] && [ -n "$kitty_file" ]; then
-    if [ -n "${KITTY_INSTALLATION_DIR:-}" ]; then
-      kitty_candidate="${KITTY_INSTALLATION_DIR}/shell-integration/${kitty_shell}/${kitty_file}"
+    for kitty_base in "${KITTY_INSTALLATION_DIR:-}" /usr/lib/kitty /opt/homebrew/opt/kitty /home/linuxbrew/.linuxbrew/opt/kitty; do
+      [ -n "$kitty_base" ] || continue
+      kitty_candidate="${kitty_base}/shell-integration/${kitty_shell}/${kitty_file}"
       if [ -r "$kitty_candidate" ]; then
         kitty_integration="$kitty_candidate"
+        break
       fi
-    fi
-
-    if [ -z "$kitty_integration" ]; then
-      kitty_candidate="/usr/lib/kitty/shell-integration/${kitty_shell}/${kitty_file}"
-      if [ -r "$kitty_candidate" ]; then
-        kitty_integration="$kitty_candidate"
-      fi
-    fi
-
-    if [ -z "$kitty_integration" ]; then
-      for kitty_prefix in /opt/homebrew/opt/kitty /home/linuxbrew/.linuxbrew/opt/kitty; do
-        kitty_candidate="${kitty_prefix}/shell-integration/${kitty_shell}/${kitty_file}"
-        if [ -r "$kitty_candidate" ]; then
-          kitty_integration="$kitty_candidate"
-          break
-        fi
-      done
-    fi
+    done
 
     if [ -z "$kitty_integration" ]; then
       kitty_sort_mode=
@@ -155,7 +140,7 @@ if [ "${TERM:-}" = "xterm-kitty" ]; then
   fi
 
   unset kitty_candidate
-  unset kitty_prefix
+  unset kitty_base
   unset kitty_cellar
   unset kitty_version_dir
   unset kitty_sort_mode
