@@ -66,13 +66,19 @@ append_fzf_preview_opt() {
   local opts_var="$1"
   local preview_cmd="$2"
   local current_opts
+  local preview_quoted
+  local new_value
 
   [ -n "$preview_cmd" ] || return 0
-  eval "current_opts=\${$opts_var:-}"
+  # Use zsh-native quoting so preview commands containing quotes remain a
+  # single shell word when stored in FZF_*_OPTS.
+  preview_quoted="${(qq)preview_cmd}"
+  current_opts="${(P)opts_var:-}"
   case " ${current_opts:-} " in
     *" --preview "*|*" --preview="*) return 0 ;;
   esac
-  eval "export $opts_var=\"\${current_opts:+\$current_opts }--preview '$preview_cmd'\""
+  new_value="${current_opts:+$current_opts }--preview=${preview_quoted}"
+  typeset -gx "$opts_var=$new_value"
 }
 
 # Completion
@@ -100,13 +106,19 @@ if command -v fzf >/dev/null 2>&1; then
   if typeset -f _fzf_preview_cmd >/dev/null 2>&1; then
     file_preview_cmd="$(_fzf_preview_cmd)"
   else
-    file_preview_cmd=""
+    file_preview_cmd='sh -c '\''sed -n "1,200p" < "$1" 2>/dev/null || head -n 200 < "$1" 2>/dev/null'\'' sh {}'
   fi
 
   if typeset -f _fzf_dir_preview_cmd >/dev/null 2>&1; then
     dir_preview_cmd="$(_fzf_dir_preview_cmd)"
   else
-    dir_preview_cmd=""
+    if command -v eza >/dev/null 2>&1; then
+      dir_preview_cmd="eza --long --all -- {}"
+    else
+      # Keep option-safe handling for dash-prefixed paths while remaining
+      # compatible with BSD/macOS ls variants that may reject `--`.
+      dir_preview_cmd="sh -c 'ls -la -- \"$1\" 2>/dev/null || ls -la \"$1\" 2>/dev/null' sh {}"
+    fi
   fi
 
   append_fzf_preview_opt FZF_CTRL_T_OPTS "$file_preview_cmd"
