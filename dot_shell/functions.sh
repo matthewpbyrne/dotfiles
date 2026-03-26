@@ -83,7 +83,9 @@ _fzf_dir_preview_cmd() {
 	if command -v eza >/dev/null 2>&1; then
 		printf '%s' 'eza --long --all -- {}'
 	else
-		printf '%s' 'ls -la -- {}'
+		# Prefer `--` for option-safe paths, but fall back for BSD/macOS ls
+		# variants that may reject it.
+		printf '%s' 'sh -c '"'"'ls -la -- "$1" 2>/dev/null || ls -la "$1" 2>/dev/null'"'"' sh {}'
 	fi
 }
 
