@@ -79,6 +79,14 @@ _fzf_preview_cmd() {
 	fi
 }
 
+_fzf_dir_preview_cmd() {
+	if command -v eza >/dev/null 2>&1; then
+		printf '%s' 'eza --long --all {}'
+	else
+		printf '%s' 'ls -la {}'
+	fi
+}
+
 # Fuzzy-find a file and open it in $EDITOR.
 # NOTE: This overlaps with fzf's built-in CTRL-T picker and wrappers such as
 # fzf.vim/fzf-lua; keep only if a shell-native helper is still preferred.
@@ -120,42 +128,6 @@ fh() {
 
 	printf '%s\n' "$_fh_selected_history"
 	unset _fh_selected_history
-}
-
-# Fuzzy-select a git branch and switch to it.
-# NOTE: This overlaps with tools/plugins like forgit and fzf-git.sh.
-fbr() {
-	command -v git >/dev/null 2>&1 || return 1
-	command -v fzf >/dev/null 2>&1 || return 1
-
-	git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 1
-	_fbr_selected_branch="$(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes \
-		| grep -v '/HEAD$' \
-		| awk '!seen[$0]++' \
-		| fzf)"
-	if [ -z "$_fbr_selected_branch" ]; then
-		unset _fbr_selected_branch
-		return 0
-	fi
-	if git show-ref --verify --quiet "refs/heads/$_fbr_selected_branch"; then
-		# Selected name matches a local branch; switch to it directly.
-		git switch "$_fbr_selected_branch"
-	elif git show-ref --verify --quiet "refs/remotes/$_fbr_selected_branch"; then
-		# Selected name matches a remote-tracking branch.
-		_fbr_local_branch="${_fbr_selected_branch#*/}"
-		if git show-ref --verify --quiet "refs/heads/$_fbr_local_branch"; then
-			# Local branch already exists; switch to it.
-			git switch "$_fbr_local_branch"
-		else
-			# Create a local branch that tracks the selected remote branch.
-			git switch -c "$_fbr_local_branch" --track "$_fbr_selected_branch"
-		fi
-		unset _fbr_local_branch
-	else
-		# Fallback for non-standard selections.
-		git switch "$_fbr_selected_branch"
-	fi
-	unset _fbr_selected_branch
 }
 
 # Fuzzy-select and attach/switch to an existing tmux session.
