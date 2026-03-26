@@ -62,6 +62,25 @@ build_antidote_bundle "$ZSH_PLUGINS_FILE" "$ZSH_PLUGINS_BUNDLE"
 
 build_antidote_bundle "$ZSH_PLUGINS_LATE_FILE" "$ZSH_PLUGINS_LATE_BUNDLE"
 
+append_fzf_preview_opt() {
+  local opts_var="$1"
+  local preview_cmd="$2"
+  local current_opts
+  local preview_quoted
+  local new_value
+
+  [ -n "$preview_cmd" ] || return 0
+  # Use zsh-native quoting so preview commands containing quotes remain a
+  # single shell word when stored in FZF_*_OPTS.
+  preview_quoted="${(qq)preview_cmd}"
+  current_opts="${(P)opts_var:-}"
+  case " ${current_opts:-} " in
+    *" --preview "*|*" --preview="*) return 0 ;;
+  esac
+  new_value="${current_opts:+$current_opts }--preview=${preview_quoted}"
+  typeset -gx "$opts_var=$new_value"
+}
+
 # Completion
 autoload -Uz compinit
 zstyle ':completion:*' menu select
@@ -77,22 +96,56 @@ if (( $+commands[direnv] )); then
   eval "$(direnv hook zsh)"
 fi
 
+# zoxide (directory jumping without overriding cd)
+if (( $+commands[zoxide] )); then
+  eval "$(zoxide init zsh --cmd z)"
+fi
+
 # fzf integration
 if command -v fzf >/dev/null 2>&1; then
+  if typeset -f _fzf_preview_cmd >/dev/null 2>&1; then
+    file_preview_cmd="$(_fzf_preview_cmd)"
+  else
+    file_preview_cmd='sh -c '\''sed -n "1,200p" < "$1" 2>/dev/null || head -n 200 < "$1" 2>/dev/null'\'' sh '\''{}'\'''
+  fi
+
+  if typeset -f _fzf_dir_preview_cmd >/dev/null 2>&1; then
+    dir_preview_cmd="$(_fzf_dir_preview_cmd)"
+  else
+    if command -v eza >/dev/null 2>&1; then
+      dir_preview_cmd="eza --long --all -- '{}'"
+    else
+      # Keep option-safe handling for dash-prefixed paths while remaining
+      # compatible with BSD/macOS ls variants that may reject `--`.
+      dir_preview_cmd="sh -c 'ls -la -- \"\$1\" 2>/dev/null || ls -la \"\$1\" 2>/dev/null' sh '{}'"
+    fi
+  fi
+
+  append_fzf_preview_opt FZF_CTRL_T_OPTS "$file_preview_cmd"
+  append_fzf_preview_opt FZF_ALT_C_OPTS "$dir_preview_cmd"
+
   if fzf_zsh="$(fzf --zsh 2>/dev/null)"; then
     eval "$fzf_zsh"
     unset fzf_zsh
   else
-    for f in \
-      /usr/share/fzf/key-bindings.zsh \
-      /usr/share/fzf/completion.zsh \
-      /opt/homebrew/opt/fzf/shell/key-bindings.zsh \
-      /opt/homebrew/opt/fzf/shell/completion.zsh
-    do
-      [[ -f "$f" ]] && source "$f"
+    fzf_shell_dir=""
+    for fzf_dir in /usr/share/fzf /opt/homebrew/opt/fzf/shell; do
+      if [[ -f "$fzf_dir/key-bindings.zsh" ]] || [[ -f "$fzf_dir/completion.zsh" ]] ; then
+        fzf_shell_dir="$fzf_dir"
+        break
+      fi
     done
+    if [[ -n "$fzf_shell_dir" ]] ; then
+      [[ -f "$fzf_shell_dir/key-bindings.zsh" ]] && source "$fzf_shell_dir/key-bindings.zsh"
+      [[ -f "$fzf_shell_dir/completion.zsh" ]] && source "$fzf_shell_dir/completion.zsh"
+    fi
+    unset fzf_shell_dir
+    unset fzf_dir
   fi
-fi
+
+  unset file_preview_cmd
+  unset dir_preview_cmd
+  fi
 
 # prompt
 if command -v starship >/dev/null 2>&1; then

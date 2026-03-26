@@ -31,6 +31,8 @@ alias ec='emacsclient'
 
 # Neovim / Vim configs
 alias vimrc='$EDITOR $HOME/.config/nvim/init.lua'
+alias vf='ff'
+alias vfh='fh'
 
 # Shell / dotfiles
 alias conf_aliases='$EDITOR ~/.shell/aliases.sh'
