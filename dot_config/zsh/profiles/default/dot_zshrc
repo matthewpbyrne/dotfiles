@@ -106,18 +106,18 @@ if command -v fzf >/dev/null 2>&1; then
   if typeset -f _fzf_preview_cmd >/dev/null 2>&1; then
     file_preview_cmd="$(_fzf_preview_cmd)"
   else
-    file_preview_cmd='sh -c '\''sed -n "1,200p" < "$1" 2>/dev/null || head -n 200 < "$1" 2>/dev/null'\'' sh {}'
+    file_preview_cmd='sh -c '\''sed -n "1,200p" < "$1" 2>/dev/null || head -n 200 < "$1" 2>/dev/null'\'' sh '\''{}'\'''
   fi
 
   if typeset -f _fzf_dir_preview_cmd >/dev/null 2>&1; then
     dir_preview_cmd="$(_fzf_dir_preview_cmd)"
   else
     if command -v eza >/dev/null 2>&1; then
-      dir_preview_cmd="eza --long --all -- {}"
+      dir_preview_cmd="eza --long --all -- '{}'"
     else
       # Keep option-safe handling for dash-prefixed paths while remaining
       # compatible with BSD/macOS ls variants that may reject `--`.
-      dir_preview_cmd="sh -c 'ls -la -- \"$1\" 2>/dev/null || ls -la \"$1\" 2>/dev/null' sh {}"
+      dir_preview_cmd="sh -c 'ls -la -- \"\$1\" 2>/dev/null || ls -la \"\$1\" 2>/dev/null' sh '{}'"
     fi
   fi
 
