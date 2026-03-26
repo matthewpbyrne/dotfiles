@@ -134,9 +134,22 @@ fbr() {
 		return 0
 	fi
 	if git show-ref --verify --quiet "refs/heads/$_fbr_selected_branch"; then
+		# Selected name matches a local branch; switch to it directly.
 		git switch "$_fbr_selected_branch"
+	elif git show-ref --verify --quiet "refs/remotes/$_fbr_selected_branch"; then
+		# Selected name matches a remote-tracking branch.
+		_fbr_local_branch="${_fbr_selected_branch#*/}"
+		if git show-ref --verify --quiet "refs/heads/$_fbr_local_branch"; then
+			# Local branch already exists; switch to it.
+			git switch "$_fbr_local_branch"
+		else
+			# Create a local branch that tracks the selected remote branch.
+			git switch -c "$_fbr_local_branch" --track "$_fbr_selected_branch"
+		fi
+		unset _fbr_local_branch
 	else
-		git switch --track "$_fbr_selected_branch"
+		# Fallback for non-standard selections.
+		git switch "$_fbr_selected_branch"
 	fi
 	unset _fbr_selected_branch
 }
