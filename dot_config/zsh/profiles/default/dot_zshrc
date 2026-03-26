@@ -129,22 +129,23 @@ if command -v fzf >/dev/null 2>&1; then
     unset fzf_zsh
   else
     fzf_shell_dir=""
-    for dir in /usr/share/fzf /opt/homebrew/opt/fzf/shell; do
-      if [[ -f "$dir/key-bindings.zsh" ]] || [[ -f "$dir/completion.zsh" ]]; then
-        fzf_shell_dir="$dir"
+    for fzf_dir in /usr/share/fzf /opt/homebrew/opt/fzf/shell; do
+      if [[ -f "$fzf_dir/key-bindings.zsh" ]] || [[ -f "$fzf_dir/completion.zsh" ]] ; then
+        fzf_shell_dir="$fzf_dir"
         break
       fi
     done
-    if [[ -n "$fzf_shell_dir" ]]; then
+    if [[ -n "$fzf_shell_dir" ]] ; then
       [[ -f "$fzf_shell_dir/key-bindings.zsh" ]] && source "$fzf_shell_dir/key-bindings.zsh"
       [[ -f "$fzf_shell_dir/completion.zsh" ]] && source "$fzf_shell_dir/completion.zsh"
     fi
     unset fzf_shell_dir
+    unset fzf_dir
   fi
 
   unset file_preview_cmd
   unset dir_preview_cmd
-fi
+  fi
 
 # prompt
 if command -v starship >/dev/null 2>&1; then
