@@ -75,7 +75,7 @@ _fzf_preview_cmd() {
 	elif command -v batcat >/dev/null 2>&1; then
 		printf '%s' 'batcat --style=numbers --color=always --line-range=:200 -- {}'
 	else
-		printf '%s' 'sh -c '"'"'sed -n "1,200p" < "$1"'"'"' sh {}'
+		printf '%s' 'sh -c '"'"'sed -n "1,200p" < "$1" 2>/dev/null || head -n 200 < "$1" 2>/dev/null'"'"' sh {}'
 	fi
 }
 
