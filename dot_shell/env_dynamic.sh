@@ -60,14 +60,14 @@ fi
 # Terminal capability hints
 colorterm_hint=
 case "${TERM_PROGRAM:-}" in
-  ghostty | iTerm.app | WezTerm | Apple_Terminal)
+  ghostty | iTerm.app | WezTerm | Apple_Terminal | Alacritty)
     colorterm_hint=1
     ;;
 esac
 
 if [ -z "$colorterm_hint" ]; then
   case "${TERM:-}" in
-    alacritty | ghostty | xterm-kitty)
+    ghostty | xterm-kitty)
       colorterm_hint=1
       ;;
   esac
