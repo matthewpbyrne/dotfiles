@@ -11,7 +11,7 @@ assert_line() {
   local file="$1"
   local pattern="$2"
   local description="$3"
-  if [ ! -r "$file" ]; then
+  if [ ! -f "$file" ] || [ ! -r "$file" ]; then
     echo "Missing or unreadable file for ${description}: ${file}" >&2
     return 1
   fi
