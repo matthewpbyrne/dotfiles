@@ -4,6 +4,8 @@
 export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
 
 # Preferred editor (PATH-dependent)
+# Keep host/user-provided EDITOR if present.
+# To always prefer local detection (nvim/vim/vi), remove this guard.
 if [ -z "${EDITOR:-}" ]; then
   if command -v nvim > /dev/null 2>&1; then
     EDITOR="$(command -v nvim)"
@@ -24,6 +26,8 @@ export VISUAL
 
 # Go-derived environment
 if command -v go > /dev/null 2>&1; then
+  # Keep host/user-provided GOBIN if present.
+  # To always recompute and override GOBIN, remove this guard.
   if [ -z "${GOBIN:-}" ]; then
     GOBIN="$(go env GOBIN 2> /dev/null)"
     if [ -z "$GOBIN" ]; then
