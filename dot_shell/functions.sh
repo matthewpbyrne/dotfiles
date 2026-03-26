@@ -71,21 +71,21 @@ dcupd() {
 
 _fzf_preview_cmd() {
 	if command -v bat >/dev/null 2>&1; then
-		printf '%s' 'bat --style=numbers --color=always --line-range=:200 -- {}'
+		printf '%s' "bat --style=numbers --color=always --line-range=:200 -- '{}'"
 	elif command -v batcat >/dev/null 2>&1; then
-		printf '%s' 'batcat --style=numbers --color=always --line-range=:200 -- {}'
+		printf '%s' "batcat --style=numbers --color=always --line-range=:200 -- '{}'"
 	else
-		printf '%s' 'sh -c '"'"'sed -n "1,200p" < "$1" 2>/dev/null || head -n 200 < "$1" 2>/dev/null'"'"' sh {}'
+		printf '%s' 'sh -c '"'"'sed -n "1,200p" < "$1" 2>/dev/null || head -n 200 < "$1" 2>/dev/null'"'"' sh '"'"'{}'"'"''
 	fi
 }
 
 _fzf_dir_preview_cmd() {
 	if command -v eza >/dev/null 2>&1; then
-		printf '%s' 'eza --long --all -- {}'
+		printf '%s' "eza --long --all -- '{}'"
 	else
 		# Prefer `--` for option-safe paths, but fall back for BSD/macOS ls
 		# variants that may reject it.
-		printf '%s' 'sh -c '"'"'ls -la -- "$1" 2>/dev/null || ls -la "$1" 2>/dev/null'"'"' sh {}'
+		printf '%s' 'sh -c '"'"'ls -la -- "$1" 2>/dev/null || ls -la "$1" 2>/dev/null'"'"' sh '"'"'{}'"'"''
 	fi
 }
 
@@ -118,7 +118,7 @@ fh() {
 	command -v fzf >/dev/null 2>&1 || return 1
 
 	if [ -n "${ZSH_VERSION:-}" ]; then
-		_fh_selected_history="$(fc -rl 1 | sed 's/^[[:space:]]*[0-9][0-9]*[[:space:]]*//' | fzf --tac)"
+		_fh_selected_history="$(fc -rl 1 | sed 's/^[[:space:]]*[0-9][0-9]*[[:space:]]*//' | fzf)"
 	else
 		_fh_selected_history="$(history | sed 's/^[[:space:]]*[0-9][0-9]*[[:space:]]*//' | fzf --tac)"
 	fi
