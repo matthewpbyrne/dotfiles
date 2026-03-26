@@ -81,9 +81,9 @@ _fzf_preview_cmd() {
 
 _fzf_dir_preview_cmd() {
 	if command -v eza >/dev/null 2>&1; then
-		printf '%s' 'eza --long --all {}'
+		printf '%s' 'eza --long --all -- {}'
 	else
-		printf '%s' 'ls -la {}'
+		printf '%s' 'ls -la -- {}'
 	fi
 }
 
