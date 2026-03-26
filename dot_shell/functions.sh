@@ -79,6 +79,14 @@ _fzf_preview_cmd() {
 	fi
 }
 
+_fzf_dir_preview_cmd() {
+	if command -v eza >/dev/null 2>&1; then
+		printf '%s' 'eza --long --all {}'
+	else
+		printf '%s' 'ls -la {}'
+	fi
+}
+
 # Fuzzy-find a file and open it in $EDITOR.
 ff() {
 	command -v fzf >/dev/null 2>&1 || return 1
