@@ -43,23 +43,34 @@ fi
 
 # LuaRocks environment
 if command -v luarocks > /dev/null 2>&1; then
-  eval "$(luarocks path --shell=sh 2> /dev/null)"
+  luarocks_env="$(luarocks path --shell=sh 2> /dev/null)"
+  if [ -n "$luarocks_env" ]; then
+    eval "$luarocks_env"
+  fi
+  unset luarocks_env
 fi
 
 # Terminal capability hints
+colorterm_hint=
 case "${TERM_PROGRAM:-}" in
   ghostty | iTerm.app | WezTerm | Apple_Terminal)
-    : "${COLORTERM:=truecolor}"
-    export COLORTERM
+    colorterm_hint=1
     ;;
 esac
 
-case "${TERM:-}" in
-  alacritty | ghostty | xterm-kitty)
-    : "${COLORTERM:=truecolor}"
-    export COLORTERM
-    ;;
-esac
+if [ -z "$colorterm_hint" ]; then
+  case "${TERM:-}" in
+    alacritty | ghostty | xterm-kitty)
+      colorterm_hint=1
+      ;;
+  esac
+fi
+
+if [ -n "$colorterm_hint" ]; then
+  : "${COLORTERM:=truecolor}"
+  export COLORTERM
+fi
+unset colorterm_hint
 
 # Kitty shell integration (if installed) improves cwd/shell state tracking.
 if [ "${TERM:-}" = "xterm-kitty" ]; then
@@ -147,6 +158,6 @@ fi
 
 # Keep tmux global PATH in sync so plugins launched in tmux popups
 # can find tools installed by asdf, Homebrew, etc.
-if [ -n "${TMUX:-}" ]; then
+if [ -n "${TMUX:-}" ] && command -v tmux > /dev/null 2>&1; then
   tmux set-environment -g PATH "$PATH" 2> /dev/null || true
 fi
