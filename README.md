@@ -32,6 +32,8 @@ Install with your package manager, for example:
 ```bash
 # Debian/Ubuntu
 sudo apt install -y zoxide fzf direnv bat
+# Note: on Debian/Ubuntu the `bat` package provides a `batcat` binary. These dotfiles
+# support `batcat` out of the box, so no extra configuration is needed.
 
 # Fedora
 sudo dnf install -y zoxide fzf direnv bat
