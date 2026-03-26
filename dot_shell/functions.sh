@@ -80,6 +80,8 @@ _fzf_preview_cmd() {
 }
 
 # Fuzzy-find a file and open it in $EDITOR.
+# NOTE: This overlaps with fzf's built-in CTRL-T picker and wrappers such as
+# fzf.vim/fzf-lua; keep only if a shell-native helper is still preferred.
 ff() {
 	command -v fzf >/dev/null 2>&1 || return 1
 
@@ -101,6 +103,7 @@ ff() {
 }
 
 # Fuzzy-search shell history and print the chosen command.
+# NOTE: This overlaps with fzf's built-in CTRL-R history integration.
 fh() {
 	command -v fzf >/dev/null 2>&1 || return 1
 
@@ -120,6 +123,7 @@ fh() {
 }
 
 # Fuzzy-select a git branch and switch to it.
+# NOTE: This overlaps with tools/plugins like forgit and fzf-git.sh.
 fbr() {
 	command -v git >/dev/null 2>&1 || return 1
 	command -v fzf >/dev/null 2>&1 || return 1
@@ -155,6 +159,7 @@ fbr() {
 }
 
 # Fuzzy-select and attach/switch to an existing tmux session.
+# NOTE: This overlaps with tmux-fzf and tmux-sessionizer style workflows.
 tss() {
 	command -v tmux >/dev/null 2>&1 || return 1
 	command -v fzf >/dev/null 2>&1 || return 1
@@ -181,6 +186,7 @@ zproj() {
 }
 
 # Fuzzy-select from zoxide-ranked directories and jump there.
+# NOTE: zoxide can provide an interactive picker directly via `zi`.
 zjump() {
 	command -v zoxide >/dev/null 2>&1 || return 1
 	command -v fzf >/dev/null 2>&1 || return 1
