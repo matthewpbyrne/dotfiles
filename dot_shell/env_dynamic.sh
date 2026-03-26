@@ -67,7 +67,7 @@ esac
 
 if [ -z "$colorterm_hint" ]; then
   case "${TERM:-}" in
-    ghostty | xterm-kitty)
+    ghostty | xterm-ghostty | xterm-kitty)
       colorterm_hint=1
       ;;
   esac
