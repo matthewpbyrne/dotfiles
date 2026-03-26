@@ -117,7 +117,7 @@ if command -v fzf >/dev/null 2>&1; then
     else
       # Keep option-safe handling for dash-prefixed paths while remaining
       # compatible with BSD/macOS ls variants that may reject `--`.
-      dir_preview_cmd="sh -c 'ls -la -- \"\$1\" 2>/dev/null || ls -la \"\$1\" 2>/dev/null' sh {}"
+      dir_preview_cmd="sh -c 'ls -la -- \"$1\" 2>/dev/null || ls -la \"$1\" 2>/dev/null' sh {}"
     fi
   fi
 
