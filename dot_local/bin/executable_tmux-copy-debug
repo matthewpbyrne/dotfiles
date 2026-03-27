@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# tmux-copy-debug: isolated tmux for copy/paste crash troubleshooting
+#
+# Usage:
+#   tmux-copy-debug [profile]
+#
+# Examples:
+#   tmux-copy-debug
+#   tmux-copy-debug alacritty-copy
+
+set -euo pipefail
+
+PROFILE="${1:-copy-debug}"
+SOCKET="tmux-${PROFILE}"
+CONFIG="${HOME}/.config/tmux/debug/copy-troubleshoot.conf"
+LOG_DIR="${XDG_STATE_HOME:-${HOME}/.local/state}/tmux/${PROFILE}"
+
+mkdir -p "${LOG_DIR}"
+cd "${LOG_DIR}"
+
+printf 'tmux copy/paste debug logs will be written under %s\n' "${LOG_DIR}"
+printf 'using config: %s\n' "${CONFIG}"
+printf 'attach with: tmux -L %s attach\n' "${SOCKET}"
+
+exec tmux -vv -L "${SOCKET}" -f "${CONFIG}" new-session
