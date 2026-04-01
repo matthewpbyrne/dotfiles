@@ -12,7 +12,7 @@
 # optional: machine-specific overrides
 *.local.sh
 
-# broot installation state marker and launchers (generated/managed by `broot --install`; see run_install_broot_launcher.sh)
+# broot installation state marker and launchers (generated/managed by `broot --install`; see run_once_install_broot_launcher.sh)
 .config/broot/launcher/*
 
 # repo-only helper files
