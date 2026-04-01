@@ -30,3 +30,5 @@ shopt -s histappend
 
 # Minimal prompt
 PS1='\u@\h:\w\$ '
+
+source /home/matthew/.config/broot/launcher/bash/br
