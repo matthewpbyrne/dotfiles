@@ -116,3 +116,5 @@ bindkey '^X^E' edit-command-line
 
 # Load late plugins (syntax highlighting etc.)
 [ -f "$ZSH_PLUGINS_LATE_BUNDLE" ] && source "$ZSH_PLUGINS_LATE_BUNDLE"
+
+source /home/matthew/.config/broot/launcher/bash/br
