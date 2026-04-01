@@ -31,4 +31,8 @@ shopt -s histappend
 # Minimal prompt
 PS1='\u@\h:\w\$ '
 
-source /home/matthew/.config/broot/launcher/bash/br
+# broot launcher
+# shellcheck source=/dev/null
+_broot_launcher="${XDG_CONFIG_HOME:-$HOME/.config}/broot/launcher/bash/br"
+[ -f "$_broot_launcher" ] && . "$_broot_launcher"
+unset _broot_launcher
