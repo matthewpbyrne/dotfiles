@@ -38,9 +38,9 @@ copy_on_select false
 // theme "tokyo-night"
 
 keybinds clear-defaults=false {
-    // Make Ctrl-g the prefix key (similar to tmux C-b feel, but non-conflicting)
-    // Uncomment the block below to remap the default leader key.
+    // Default prefix key is Ctrl-g (similar to tmux C-b feel, but non-conflicting)
+    // Uncomment the block below to remap the default leader key, e.g. to Ctrl-b.
     // shared_except "locked" {
-    //     bind "Ctrl g" { SwitchToMode "Normal"; }
+    //     bind "Ctrl b" { SwitchToMode "Normal"; }
     // }
 }
