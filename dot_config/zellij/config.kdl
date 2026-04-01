@@ -1,0 +1,46 @@
+// ----------------------------------------------------------------------
+// Zellij configuration
+// ----------------------------------------------------------------------
+//
+// Managed by chezmoi. Source: dot_config/zellij/config.kdl
+// Applied to: ~/.config/zellij/config.kdl
+//
+// Zellij uses KDL (https://kdl.dev) for configuration.
+// See https://zellij.dev/documentation/configuration for all options.
+
+// Default shell
+default_shell "zsh"
+
+// Start in a named layout
+default_layout "default"
+
+// Keep pane frames visible (shows pane titles)
+pane_frames true
+
+// Use simplified UI (no extra decorations)
+simplified_ui false
+
+// Mouse mode
+mouse_mode true
+
+// Scroll buffer size
+scroll_buffer_size 100000
+
+// Copy command — uses system clipboard on macOS and xclip/xsel on Linux
+// copy_command "pbcopy"   // macOS
+// copy_command "xclip -selection clipboard"  // Linux (X11)
+// copy_command "wl-copy"  // Linux (Wayland)
+
+// Copy on select
+copy_on_select false
+
+// Theme — change to match your terminal/neovim colour scheme
+// theme "tokyo-night"
+
+keybinds clear-defaults=false {
+    // Make Ctrl-g the prefix key (similar to tmux C-b feel, but non-conflicting)
+    // Uncomment the block below to remap the default leader key.
+    // shared_except "locked" {
+    //     bind "Ctrl g" { SwitchToMode "Normal"; }
+    // }
+}

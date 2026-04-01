@@ -1,0 +1,24 @@
+// ----------------------------------------------------------------------
+// Zellij default layout
+// ----------------------------------------------------------------------
+//
+// Managed by chezmoi. Source: dot_config/zellij/layouts/default.kdl
+// Applied to: ~/.config/zellij/layouts/default.kdl
+//
+// This is the layout loaded on `zellij` startup (default_layout in config.kdl).
+// See https://zellij.dev/documentation/layouts for the full layout spec.
+
+layout {
+    // Top tab bar
+    pane size=1 borderless=true {
+        plugin location="zellij:tab-bar"
+    }
+
+    // Main working pane — uses default_shell from config.kdl
+    pane
+
+    // Bottom status bar
+    pane size=2 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+}
