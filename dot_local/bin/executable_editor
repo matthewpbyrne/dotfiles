@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+set -eu
+
+if [ -t 0 ] && [ -t 1 ]; then
+  exec nvim "$@"
+fi
+
+if command -v kitty >/dev/null 2>&1; then
+  exec kitty -- nvim "$@"
+fi
+
+exec x-terminal-emulator -e nvim "$@"
