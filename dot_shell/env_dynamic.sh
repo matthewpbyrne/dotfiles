@@ -3,16 +3,8 @@
 # Tool-managed base dirs
 export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
 
-# Preferred editor (PATH-dependent)
-if command -v nvim >/dev/null 2>&1; then
-	EDITOR="$(command -v nvim)"
-elif command -v vim >/dev/null 2>&1; then
-	EDITOR="$(command -v vim)"
-elif command -v vi >/dev/null 2>&1; then
-	EDITOR="$(command -v vi)"
-else
-	EDITOR="vi"
-fi
+# Preferred editor wrapper
+EDITOR="$HOME/.local/bin/editor"
 export EDITOR
 
 if [ -z "${VISUAL:-}" ]; then
