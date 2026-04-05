@@ -7,7 +7,9 @@ export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
 EDITOR="$HOME/.local/bin/editor"
 export EDITOR
 
-VISUAL="$EDITOR"
+if [ -z "${VISUAL:-}" ]; then
+	VISUAL="$EDITOR"
+fi
 export VISUAL
 
 # Go-derived environment

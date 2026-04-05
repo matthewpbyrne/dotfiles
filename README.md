@@ -21,12 +21,12 @@ After that, chezmoi manages all configuration and bootstrap scripts.
 A small wrapper script is installed at `~/.local/bin/editor` (source file: `dot_local/bin/executable_editor`).
 
 - In a terminal, it runs `nvim` directly.
-- Outside a terminal, it launches `nvim` in `kitty` when available, with fallback to `x-terminal-emulator`.
+- Outside a terminal, it launches `nvim` in `kitty`; on supported Arch/Manjaro setups, ensure `kitty` is installed because `x-terminal-emulator` is not a reliable fallback.
 - All arguments are passed through unchanged.
 
 qutebrowser is configured with:
 
-- `c.editor.command = ["editor", "{file}"]`
+- `c.editor.command = ["~/.local/bin/editor", "{file}"]` (expanded in qutebrowser config)
 
 So browser textarea editing (for example `Ctrl+e`) opens in Neovim and writes back when you save and quit.
 

@@ -1,3 +1,6 @@
 # Managed by chezmoi
+# ruff: noqa: F821
 
-c.editor.command = ["editor", "{file}"]
+import os
+
+c.editor.command = [os.path.expanduser("~/.local/bin/editor"), "{file}"]
