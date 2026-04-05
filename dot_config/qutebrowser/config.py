@@ -3,4 +3,6 @@
 
 import os
 
+config.load_autoconfig()
+
 c.editor.command = [os.path.expanduser("~/.local/bin/editor"), "{file}"]
