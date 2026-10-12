@@ -16,3 +16,7 @@
 Makefile
 .editorconfig
 *.md
+
+# ~/.claude: track the slash commands only — everything else is session state
+.claude/*
+!.claude/commands
